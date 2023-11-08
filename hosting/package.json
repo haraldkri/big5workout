@@ -2,20 +2,45 @@
   "name": "hosting",
   "private": true,
   "version": "0.0.0",
+  "author": {
+    "name": "Harald Kriebisch",
+    "email": "kriebisch.harald+contact@gmail.com",
+    "url": "https://harald-kriebisch-personal.web.app/"
+  },
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 3000",
+    "start:emulators": "firebase emulators:start",
+    "start:emulator:hosting": "firebase emulators:start --only hosting",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
-    "jest-environment-jsdom": "^29.7.0",
+    "firebase": "^10.5.2",
+    "i18next": "^23.6.0",
+    "i18next-browser-languagedetector": "^7.1.0",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-i18next": "^13.3.1"
   },
   "devDependencies": {
     "@ant-design/icons": "^5.2.6",
+    "@storybook/addon-essentials": "^7.5.2",
+    "@storybook/addon-interactions": "^7.5.2",
+    "@storybook/addon-links": "^7.5.2",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.5.2",
+    "@storybook/preset-create-react-app": "^7.5.2",
+    "@storybook/react": "^7.5.2",
+    "@storybook/react-webpack5": "^7.5.2",
+    "@storybook/testing-library": "^0.2.2",
+    "@svgr/cli": "^8.1.0",
     "@types/jest": "^29.5.7",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
@@ -24,17 +49,24 @@
     "@typescript-eslint/parser": "^5.59.0",
     "@vitejs/plugin-react": "^4.0.0",
     "antd": "^5.8.6",
+    "babel-plugin-named-exports-order": "^0.0.2",
     "cypress": "^13.4.0",
     "cypress-firebase": "^3.0.2",
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "eslint-plugin-storybook": "^0.6.15",
     "firebase-admin": "^11.10.1",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prop-types": "^15.8.1",
+    "react-scripts": "^5.0.1",
     "react-test-renderer": "^18.2.0",
+    "storybook": "^7.5.2",
     "styled-components": "^6.0.7",
     "ts-jest": "^29.1.1",
     "typescript": "^5.0.2",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "webpack": "^5.89.0"
   }
 }

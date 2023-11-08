@@ -1,0 +1,39 @@
+@import 'antd/dist/reset.css';
+
+/* Global styles */
+html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #1A1A1A;
+    color: rgba(255, 255, 255, 0.90);
+    font-size: 14px;
+    line-height: 22px;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    padding: 10px;
+}
+
+h1, h2, h3, h4 {
+    color: rgba(255, 255, 255, 1);
+}
+
+h1 {
+    font-size: 38px;
+    line-height: 46px;
+}
+
+h5 {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 16px;
+    line-height: 24px;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

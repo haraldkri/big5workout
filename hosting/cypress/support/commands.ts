@@ -41,7 +41,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/database';
 import 'firebase/compat/firestore';
 import {attachCustomCommands} from 'cypress-firebase';
-import {firebaseConfig} from "../../src/firebase-config.tsx";
+import {firebaseConfig} from "../../src/firebase-config";
 
 firebase.initializeApp(firebaseConfig);
 
