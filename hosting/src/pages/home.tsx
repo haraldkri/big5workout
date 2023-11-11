@@ -54,7 +54,6 @@ const Home = () => {
                         </Button>
                     </ButtonWrapper>
                 </IntroText>
-
             </ContentCard>
             <Content data-cy={"landing-page-info"}>
                 <ContentCard title={t("What this is about")}>
@@ -89,7 +88,6 @@ const Home = () => {
                     </Button>
                 </InlineGrid>
             </ContentCard>
-
         </Wrapper>
     );
 };

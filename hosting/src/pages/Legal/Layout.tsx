@@ -5,20 +5,11 @@ import Contact from "./contact.tsx";
 import {AntDesignOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {Content} from "../../components/StyledComponents";
-import {Link, useLocation} from "react-router-dom";
+import {TabLink} from "../../components/StyledComponents/routerComponents";
+import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
-import styled from "styled-components";
 
 type LegalPages = 'imprint' | 'privacy-policy' | 'contact';
-
-const TabLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-
-  &:focus, &:hover, &:visited, &:link, &:active {
-    color: inherit;
-  }
-`;
 
 const LegalLayout = () => {
     const {t} = useTranslation();
@@ -29,7 +20,7 @@ const LegalLayout = () => {
     }
     const [activeTab, setActiveTab] = useState<LegalPages>(getActiveTab());
 
-    const tabs = [
+    const items = [
         {
             label: <TabLink to={"/legal/imprint"}>
                 <AntDesignOutlined/>
@@ -69,7 +60,7 @@ const LegalLayout = () => {
                 activeKey={activeTab}
                 centered
                 type={"line"}
-                items={tabs}
+                items={items}
                 style={{height: "100%"}}
             />
         </Content>
