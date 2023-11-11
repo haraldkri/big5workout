@@ -1,7 +1,7 @@
 import {createBrowserRouter, Navigate, Outlet, RouterProvider} from "react-router-dom";
 import Home from "./pages/home.tsx";
 import MainLayout from "./pages/Main/Layout.tsx";
-import WorkoutList from "./pages/Main/Workout";
+import WorkoutSelectList from "./pages/Main/Workout";
 import Workout from "./pages/Main/Workout/workout.tsx";
 import Profile from "./pages/Main/Profile";
 import LegalLayout from "./pages/Legal/Layout.tsx";
@@ -30,7 +30,7 @@ const AppRouter = () => {
                         errorElement: <ErrorView/>,
                         element: <Home/>,
                         handle: {
-                            title: () => t('Landing Page')
+                            title: t('Landing Page')
                         }
                     },
                     {
@@ -45,17 +45,17 @@ const AppRouter = () => {
                             {
                                 path: "workout",
                                 handle: {
-                                    title: () => t('Select Workout')
+                                    title: t("Start Workout")
                                 },
                                 errorElement: <ErrorView/>,
-                                element: <WorkoutList/>,
+                                element: <WorkoutSelectList/>,
                                 children: [
                                     {
                                         path: ":id",
                                         errorElement: <ErrorView/>,
                                         element: <Workout/>,
                                         handle: {
-                                            title: () => t('Workout')
+                                            title: t('Workout')
                                         }
                                     }
                                 ]
@@ -65,7 +65,16 @@ const AppRouter = () => {
                                 errorElement: <ErrorView/>,
                                 element: <Profile/>,
                                 handle: {
-                                    title: () => t('Profile')
+                                    title: t('Profile')
+                                }
+                            },
+                            {
+                                // Feature not implemented yet
+                                path: "statistics",
+                                errorElement: <ErrorView/>,
+                                element: <ErrorView/>,
+                                handle: {
+                                    title: t('Statistics')
                                 }
                             }
                         ]
@@ -84,7 +93,7 @@ const AppRouter = () => {
                                 errorElement: <ErrorView/>,
                                 element: <Imprint/>,
                                 handle: {
-                                    title: () => t('Imprint')
+                                    title: t('Imprint')
                                 }
                             },
                             {
@@ -92,7 +101,7 @@ const AppRouter = () => {
                                 errorElement: <ErrorView/>,
                                 element: <PrivacyPolicy/>,
                                 handle: {
-                                    title: () => t('Privacy Policy')
+                                    title: t('Privacy Policy')
                                 }
                             },
                             {
@@ -100,7 +109,7 @@ const AppRouter = () => {
                                 errorElement: <ErrorView/>,
                                 element: <Contact/>,
                                 handle: {
-                                    title: () => t('Contact')
+                                    title: t('Contact')
                                 }
                             }
                         ]
