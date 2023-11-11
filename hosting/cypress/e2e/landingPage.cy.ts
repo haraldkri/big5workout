@@ -57,19 +57,19 @@ describe('Login Redirect', () => {
         cy.visit('/app/workout');
 
         cy.get('[data-cy=landing-page]').should('not.exist');
-        cy.get('[data-cy=workout-page]').should('be.visible');
+        cy.get('[data-cy=workout-select-page]').should('be.visible');
         cy.get('[data-cy=page-header]').should('be.visible');
         cy.get('[data-cy=page-header] [data-cy=workout-title]').should('be.visible');
         cy.get('[data-cy=page-header] [data-cy=application-logo]').should('be.visible');
         cy.get('[data-cy=start-workout-button]').should("be.visible");
         cy.get('[data-cy=bottom-navigation]').should('be.visible');
-        cy.get('[data-cy=bottom-navigation] [data-cy=workout-tab]').should('be.visible');
-        cy.get('[data-cy=bottom-navigation] [data-cy=workout-tab]').should('be.selected');
-        cy.get('[data-cy=bottom-navigation] [data-cy=profile-tab]').should('be.visible');
+        cy.get('[data-cy=bottom-navigation] [data-node-key=workout]').should('be.visible');
+        cy.get('[data-cy=bottom-navigation] [data-node-key=workout]').should('be.selected');
+        cy.get('[data-cy=bottom-navigation] [data-node-key=profile]').should('be.visible');
 
-        cy.get('[data-cy=bottom-navigation] [data-cy=profile-tab]').click();
+        cy.get('[data-cy=bottom-navigation] [data-node-key=profile]').click();
         cy.get('[data-cy=profile-page]').should('be.visible');
-        cy.get('[data-cy=bottom-navigation] [data-cy=profile-tab]').should('be.selected');
+        cy.get('[data-cy=bottom-navigation] [data-node-key=profile]').should('be.selected');
         cy.get('[data-cy=data-export-button]').should('be.visible');
         cy.get('[data-cy=logout-button]').should('be.visible');
         cy.get('[data-cy=contact-button]').should('be.visible');
