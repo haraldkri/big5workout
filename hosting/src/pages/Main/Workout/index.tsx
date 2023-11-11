@@ -1,15 +1,20 @@
-import styled from "styled-components";
-import {Outlet} from "react-router-dom";
+import {Button} from "antd";
+import {useTranslation} from "react-i18next";
+import {AppPageWrapper, CenterInline} from "../../../components/StyledComponents";
 
-const Wrapper = styled.div``;
+const WorkoutSelectList = () => {
+    const {t} = useTranslation();
 
-const WorkoutList = () => {
     return (
-        <Wrapper data-cy={'workout-list-page'}>
-            {/*todo add button*/}
-            <Outlet/>
-        </Wrapper>
+        <AppPageWrapper data-cy={'workout-select-page'}>
+            <CenterInline>
+                <Button data-cy="start-workout-button" type={"primary"} size={"large"} ghost={true}
+                        title={t("Start Workout")}>
+                    {t("Start Workout")}
+                </Button>
+            </CenterInline>
+        </AppPageWrapper>
     );
 };
 
-export default WorkoutList
+export default WorkoutSelectList

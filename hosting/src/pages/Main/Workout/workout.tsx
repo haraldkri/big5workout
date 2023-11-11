@@ -7,6 +7,7 @@ const Workout = () => {
     return (
         <Wrapper data-cy={'workout-page'}>
             {/*todo add exercise list cards*/}
+            workout
             <Outlet/>
         </Wrapper>
     );
