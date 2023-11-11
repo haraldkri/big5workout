@@ -7,7 +7,9 @@ import {ThemeProvider} from "styled-components";
 const CustomThemeProvider: React.FC<PropsWithChildren> = ({children}) => {
     const {token} = theme.useToken();
     // define custom colors for antd color tokens like: primary, warning, ...
-    const customTokenSettings: Partial<AliasToken> = {};
+    const customTokenSettings: Partial<AliasToken> = {
+        purple10: '#1E1D24'
+    };
 
     return (
         <ConfigProvider
@@ -16,7 +18,7 @@ const CustomThemeProvider: React.FC<PropsWithChildren> = ({children}) => {
                 token: customTokenSettings,
             }}
         >
-            <ThemeProvider theme={token}>
+            <ThemeProvider theme={{...token, ...customTokenSettings}}>
                 {children}
             </ThemeProvider>
         </ConfigProvider>
