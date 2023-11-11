@@ -23,6 +23,20 @@ export const FlexRow = styled.div`
   gap: 10px;
 `;
 
+export const FlexCol = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const FlexGrow = styled.div`
+  flex-grow: 1;
+`;
+
+export const Grow = styled.div`
+  flex-grow: 1;
+  width: 100%;
+`;
+
 export const FlexGrowColumn = styled.div`
   flex-grow: 1;
   width: 100%;
@@ -40,4 +54,18 @@ export const Center = styled.div`
   width: 100%;
   display: grid;
   place-items: center;
+`;
+
+export const CenterInline = styled.div`
+  display: grid;
+  place-items: center;
+`;
+
+export const AppPageWrapper = styled.div`
+  padding: 25px 0;
+  overflow-y: scroll;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
