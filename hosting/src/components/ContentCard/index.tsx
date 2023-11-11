@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 
 const Content = styled.div<{ $gapSize?: number }>`
   padding: 20px;
-  background: #1E1D24;
+  background: ${({theme}) => theme.purple10};
   display: flex;
   flex-direction: column;
   gap: ${({$gapSize}) => $gapSize ?? 10}px;
