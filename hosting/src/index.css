@@ -1,7 +1,7 @@
 @import 'antd/dist/reset.css';
 
 /* Global styles */
-html, body, #root {
+html, body, #root, .ant-app {
     height: 100%;
     width: 100%;
     margin: 0;
