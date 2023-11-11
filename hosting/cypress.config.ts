@@ -1,3 +1,5 @@
+// admin has to be imported like this:
+// @ts-ignore
 import admin from 'firebase-admin';
 import {defineConfig} from 'cypress';
 import {plugin as cypressFirebasePlugin} from 'cypress-firebase';
