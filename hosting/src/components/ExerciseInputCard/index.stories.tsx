@@ -40,6 +40,25 @@ export const Default: Story = {
     },
 };
 
-export const Empty: Story = {
-    args: {},
+export const MinView: Story = {
+    args: {
+        useMinView: true,
+        data: {
+            title: 'Bench Press',
+            latestWeight: 80,
+            latestDuration: 123,
+            images: [{
+                placeholderUrl: 'https://cdn-0.weighttraining.guide/wp-content/uploads/2016/12/machine-chest-press-resized.png?ezimgfmt=ng%3Awebp%2Fngcb4',
+                url: 'https://cdn-0.weighttraining.guide/wp-content/uploads/2016/12/machine-chest-press-resized.png?ezimgfmt=ng%3Awebp%2Fngcb4',
+                link: 'https://weighttraining.guide/exercises/machine-chest-press/',
+                alt: 'Bench Press'
+            },
+                {
+                    placeholderUrl: 'https://fitnessprogramer.com/wp-content/uploads/2021/04/Lever-Shoulder-Press.gif',
+                    url: 'https://fitnessprogramer.com/wp-content/uploads/2021/04/Lever-Shoulder-Press.gif',
+                    link: 'https://weighttraining.guide/exercises/',
+                    alt: 'Bench Press'
+                }]
+        }
+    },
 };

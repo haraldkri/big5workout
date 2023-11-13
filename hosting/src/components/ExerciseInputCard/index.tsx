@@ -61,6 +61,7 @@ type Props = {
         duration: number
     },
     onChange?: (value: { weight?: number, duration?: number }) => void,
+    useMinView?: boolean,
     ///The data will be used to for testing purposes only
     data?: {
         title: string,
@@ -90,7 +91,7 @@ const defaultWeight = "0";
 const defaultDuration = "1:30";
 
 const ExerciseInputCard = (props: Props) => {
-    const {exerciseKey, value, onChange, data} = props;
+    const {exerciseKey, useMinView, value, onChange, data} = props;
     const {t} = useTranslation();
 
     const [weight, setWeight] = useState<string | undefined>(undefined);
@@ -99,6 +100,8 @@ const ExerciseInputCard = (props: Props) => {
     const [modalPickerConfig, setModalPickerConfig] = useState<ModalConfig | undefined>(undefined);
 
     const title = data?.title ?? '';
+
+    // do not query the images if useMinView is true
     const images = data?.images ?? [];
     const lastWeight = formatWeight(data?.latestWeight ?? 0);
     const lastDuration = formatSeconds(data?.latestDuration ?? 0);
@@ -150,15 +153,18 @@ const ExerciseInputCard = (props: Props) => {
 
     return <ContentCard>
         <ExerciseTitle>{title}</ExerciseTitle>
-        <Carousel>
-            {images.map((image, index) => {
-                const {placeholderUrl, url, alt, link} = image;
-                return <Item key={index}>
-                    <LazyLoadImage placeholderSrc={placeholderUrl} src={url} alt={alt}
-                                   onClick={() => link && handleImageClick(link)}/>
-                </Item>
-            })}
-        </Carousel>
+        {
+            !useMinView && <Carousel>
+                {images.map((image, index) => {
+                    const {placeholderUrl, url, alt, link} = image;
+                    return <Item key={index}>
+                        <LazyLoadImage placeholderSrc={placeholderUrl} src={url} alt={alt}
+                                       onClick={() => link && handleImageClick(link)}/>
+                    </Item>
+                })}
+            </Carousel>
+        }
+
         <InputRow>
             <Grow>
                 <Typography.Text>{t('Weight')}</Typography.Text>
