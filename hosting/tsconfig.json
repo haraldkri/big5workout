@@ -24,6 +24,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", ".storybook"],
   "references": [{ "path": "./tsconfig.node.json" }],
+
+  /* Type checking for storybook 18next json import */
+  "resolveJsonModule": true,
+  "esModuleInterop": true
 }

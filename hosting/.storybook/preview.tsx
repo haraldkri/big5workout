@@ -1,6 +1,5 @@
 import {Preview} from '@storybook/react';
-import {ConfigProvider, theme} from "antd";
-import CustomThemeProvider from "../src/provider/ThemeProvider";
+import App from "./app";
 
 const newViewports = {
     pixel6a: {
@@ -18,19 +17,10 @@ const preview: Preview = {
         defaultViewport: 'pixel6a',
     },
     decorators: [
-        (Story) => (
-            <ConfigProvider
-                theme={{
-                    algorithm: theme.darkAlgorithm,
-                }}
-            >
-                <CustomThemeProvider>
-                    {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-                    <Story/>
-                </CustomThemeProvider>
-            </ConfigProvider>
-        ),
-    ],
+        (Story, context) => {
+            return <App Story={Story} context={context}/>
+        }
+    ]
 };
 
 export default preview;
