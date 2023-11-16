@@ -1,7 +1,10 @@
 import styled from "styled-components";
-import {Outlet} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import AppHeader from "../../components/AppHeader";
 import AppFooter from "../../components/AppFooter";
+import {useUser} from "reactfire";
+import {App} from "antd";
+import {useTranslation} from "react-i18next";
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,13 +18,22 @@ const SubpageWrapper = styled.div`
 
 const MainLayout = () => {
     // todo: if user is not logged in, redirect to main page "/"
+    const {t} = useTranslation();
+    const navigate = useNavigate();
+    const {message} = App.useApp();
+    const user = useUser();
 
+    if (!user) {
+        message
+            .error(t('You are not logged in. You will be redirected to the landing page in a moment.'))
+            .then(() => navigate('/'))
+    }
     return (
         <Wrapper data-cy={'main-page'}>
             {/*todo add the header and bottom navigation*/}
             <AppHeader/>
             <SubpageWrapper>
-                <Outlet/>
+                <Outlet context={user?.data?.uid}/>
             </SubpageWrapper>
             <AppFooter/>
         </Wrapper>
