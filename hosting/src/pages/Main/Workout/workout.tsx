@@ -27,8 +27,10 @@ const Workout = () => {
 
     return (
         <Wrapper data-cy={'workout-page'}>
-            <AddRecordForm exerciseIds={data?.exerciseIds ?? []}/>
-            <Outlet/>
+            {
+                data && <AddRecordForm exerciseIds={data[0]?.exerciseIds ?? []}/>
+            }
+
         </Wrapper>
     );
 };
