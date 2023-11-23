@@ -79,8 +79,8 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
                 disabled={loading}
             >
                 {
-                    exerciseIds.map((exerciseId) => {
-                        return <Form.Item name={exerciseId} style={{marginBottom: "20px"}}>
+                    exerciseIds.map((exerciseId, index) => {
+                        return <Form.Item name={exerciseId} style={{marginBottom: "20px"}} key={index}>
                             <ExerciseInputCard exerciseId={exerciseId}
                                                onChange={(newValue) => onValueChange(exerciseId, newValue)}/>
                         </Form.Item>
