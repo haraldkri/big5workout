@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
-    "start:emulators": "firebase emulators:start",
+    "start:emulators": "firebase emulators:start --import=./saved-data --export-on-exit",
     "start:emulator:hosting": "firebase emulators:start --only hosting",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
