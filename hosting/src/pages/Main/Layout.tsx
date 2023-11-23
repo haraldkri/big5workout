@@ -20,7 +20,6 @@ const SubpageWrapper = styled.div`
 const MainLayout = () => {
     return (
         <Wrapper data-cy={'main-page'}>
-            {/*todo add the header and bottom navigation*/}
             <AppHeader/>
             <SubpageWrapper>
                 <Content>
