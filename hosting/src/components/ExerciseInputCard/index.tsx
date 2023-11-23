@@ -33,7 +33,6 @@ const ExerciseInputCard = (props: Props) => {
                 .then((querySnap) => {
                     querySnap.forEach((doc: any) => {
                         if (doc.exists()) {
-                            console.log(doc.data());
                             setExercise(doc.data());
                         }
                     });

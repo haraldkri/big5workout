@@ -35,8 +35,6 @@ const WorkoutSelectList = () => {
         navigate(`/app/workout/${workoutId}`);
     }
 
-    console.log("workoutList", workoutList)
-
     return (
         <AppPageWrapper data-cy={'workout-select-page'}>
             <CenterInline>
