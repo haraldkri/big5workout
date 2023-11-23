@@ -1,6 +1,6 @@
 export default [
     {
-        key: 'machine-chest-press',
+        id: 'machine-chest-press',
         germanName: 'Brustpresse',
         englishName: 'Chest Press',
         images: [
@@ -15,7 +15,7 @@ export default [
         ],
     },
     {
-        key: 'machine-shoulder-press',
+        id: 'machine-shoulder-press',
         germanName: 'Schulterdrücken',
         englishName: 'Shoulder Press',
         images: [
@@ -30,7 +30,7 @@ export default [
         ],
     },
     {
-        key: 'machine-seated-row',
+        id: 'machine-seated-row',
         germanName: 'Rudern',
         englishName: 'Seated Row',
         images: [
@@ -45,7 +45,7 @@ export default [
         ],
     },
     {
-        key: 'machine-pull-down',
+        id: 'machine-pull-down',
         germanName: 'Latzug',
         englishName: 'Pull Down',
         images: [
@@ -60,7 +60,7 @@ export default [
         ],
     },
     {
-        key: 'machine-leg-press',
+        id: 'machine-leg-press',
         germanName: 'Beinpresse',
         englishName: 'Leg Press',
         images: [
@@ -74,4 +74,15 @@ export default [
             }
         ],
     },
-]
+];
+
+export type Exercise = {
+    id: string;
+    germanName: string;
+    englishName: string;
+    images: {
+        url: string;
+        link: string;
+        placeholderUrl?: string;
+    }[]
+}
