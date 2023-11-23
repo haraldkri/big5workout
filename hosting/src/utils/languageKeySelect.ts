@@ -1,4 +1,3 @@
-
 // Please provide the function with the language object from the local i18n instance
 // const {i18n} = useTranslation();
 // i18n.language

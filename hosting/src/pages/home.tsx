@@ -3,12 +3,10 @@ import ContentCard from "../components/ContentCard";
 import {SmallLogoWithText} from "../components/svg";
 import {Button} from "antd";
 import {useTranslation} from "react-i18next";
-import {useNavigate, useOutletContext} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Content} from "../components/StyledComponents";
 import {useContext} from "react";
 import {UserContext} from "../context/UserContext.ts";
-import {useFirestore} from "reactfire";
-import {addDefaultWorkout} from "../utils/firestoreUtils.ts";
 
 const Wrapper = styled.div`
   height: 100%;

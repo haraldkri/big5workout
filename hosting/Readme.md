@@ -191,10 +191,13 @@ const YourFunctionalComponent: FC = () => {
     );
 };
  ```
+
 ``In case you need to update to sets of documents at the same time and it would lead to problems if only one got through, use a transaction instead``
+
 - [Transaction Example](https://firebase.google.com/codelabs/firestore-web#10)
 
 ### Update a document in firestore
+
 - you need update permissions for the collection in the `firestore.rules` file
 
 ```
