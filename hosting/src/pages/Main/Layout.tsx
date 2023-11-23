@@ -5,6 +5,7 @@ import AppFooter from "../../components/AppFooter";
 import {useUser} from "reactfire";
 import {App} from "antd";
 import {useTranslation} from "react-i18next";
+import {Content} from "../../components/StyledComponents";
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,6 +15,9 @@ const Wrapper = styled.div`
 
 const SubpageWrapper = styled.div`
   flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  margin: 10px;
 `;
 
 const MainLayout = () => {
@@ -26,14 +30,16 @@ const MainLayout = () => {
     if (!user) {
         message
             .error(t('You are not logged in. You will be redirected to the landing page in a moment.'))
-            .then(() => navigate('/'))
+            .then(() => navigate('/', {replace: true}))
     }
     return (
         <Wrapper data-cy={'main-page'}>
             {/*todo add the header and bottom navigation*/}
             <AppHeader/>
             <SubpageWrapper>
-                <Outlet context={user?.data?.uid}/>
+                <Content>
+                    <Outlet context={user?.data?.uid}/>
+                </Content>
             </SubpageWrapper>
             <AppFooter/>
         </Wrapper>

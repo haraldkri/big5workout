@@ -11,6 +11,7 @@ import Contact from "./pages/Legal/contact.tsx";
 import {useTranslation} from "react-i18next";
 import UserProvider from "./provider/UserProvider.tsx";
 import ErrorView from "./components/ErrorView";
+import WorkoutResult from "./pages/Main/Workout/result.tsx";
 
 const AppRouter = () => {
     const {t} = useTranslation();
@@ -40,22 +41,39 @@ const AppRouter = () => {
                         children: [
                             {
                                 path: "",
-                                element: <Navigate to="/app/workout"/>
+                                element: <Navigate relative={"route"} to="workout"/>
                             },
                             {
                                 path: "workout",
-                                handle: {
-                                    title: t("Start Workout")
-                                },
                                 errorElement: <ErrorView/>,
-                                element: <WorkoutSelectList/>,
+                                element: <Outlet/>,
                                 children: [
+                                    {
+                                        path: "",
+                                        element: <Navigate relative={"route"} to="list"/>
+                                    },
+                                    {
+                                        path: "list",
+                                        errorElement: <ErrorView/>,
+                                        element: <WorkoutSelectList/>,
+                                        handle: {
+                                            title: t('Start Workout')
+                                        }
+                                    },
                                     {
                                         path: ":id",
                                         errorElement: <ErrorView/>,
                                         element: <Workout/>,
                                         handle: {
                                             title: t('Workout')
+                                        }
+                                    },
+                                    {
+                                        path: "result",
+                                        errorElement: <ErrorView/>,
+                                        element: <WorkoutResult/>,
+                                        handle: {
+                                            title: t('Workout Result')
                                         }
                                     }
                                 ]
