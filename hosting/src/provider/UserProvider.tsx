@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {PropsWithChildren} from "../types.ts";
 import {useNavigate} from "react-router-dom";
-import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth";
+import {getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth";
 import {UserContext} from "../context/UserContext.ts";
 import {App} from "antd";
 
@@ -13,16 +13,16 @@ const UserProvider: React.FC<PropsWithChildren> = ({children}) => {
 
     // listen to changes on the firebase auth object and update user accordingly
     // If the user is not logged in but tries to access the app, redirect to landing page (login)
-    // useEffect(() => {
-    //     const AuthCheck = onAuthStateChanged(auth, (user) => {
-    //         if (!user && location.pathname.includes('app')) {
-    //             console.log('unauthorized');
-    //             navigate("/login", {replace: true})
-    //         }
-    //     });
-    //
-    //     return () => AuthCheck();
-    // }, [auth, navigate]);
+    useEffect(() => {
+        const AuthCheck = onAuthStateChanged(auth, (user) => {
+            if (!user && location.pathname.includes('app')) {
+                console.log('unauthorized');
+                navigate("/login", {replace: true})
+            }
+        });
+
+        return () => AuthCheck();
+    }, [auth, navigate]);
 
     const handleLogin = () => {
         const provider = new GoogleAuthProvider();
