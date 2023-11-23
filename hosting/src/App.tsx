@@ -16,13 +16,18 @@ function App() {
     const authInstance = getAuth(app);
     // const functionsInstance = getFunctions(app);
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        // Set up emulators
-        connectStorageEmulator(storageInstance, '127.0.0.1', 9199);
-        connectAuthEmulator(authInstance, 'http://127.0.0.1:9099', {
-            disableWarnings: true,
-        });
-        connectFirestoreEmulator(firestoreInstance, '127.0.0.1', 8080);
-        // connectFunctionsEmulator(functionsInstance, '127.0.0.1', 5001);
+        try {
+            // Set up emulators
+            connectStorageEmulator(storageInstance, '127.0.0.1', 9199);
+            connectAuthEmulator(authInstance, 'http://127.0.0.1:9099', {
+                disableWarnings: true,
+            });
+            connectFirestoreEmulator(firestoreInstance, '127.0.0.1', 8080);
+            // connectFunctionsEmulator(functionsInstance, '127.0.0.1', 5001);
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     const {i18n} = useTranslation();
