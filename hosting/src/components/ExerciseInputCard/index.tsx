@@ -1,31 +1,22 @@
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import {Exercise} from "../../static/defaultExercises.ts";
-import {useFirestore} from "reactfire";
-import {collection, doc, getDoc, getDocs, limit, orderBy, query} from "firebase/firestore";
-import {useOutletContext} from "react-router-dom";
+import {useFirestore, useUser} from "reactfire";
+import {collection, getDocs, limit, orderBy, query, where} from "firebase/firestore";
 import Card from "./Card";
+import {getName} from "../../utils/languageKeySelect.ts";
 
 type Props = {
     exerciseId?: string,
-    value?: {
-        weight: number,
-        duration: number
-    },
     onChange?: (value: { weight?: number, duration?: number }) => void,
     useMinView?: boolean,
 }
 
-function getExerciseName(exercise: Exercise | null, language: string) {
-    if (!exercise) return undefined;
-    if (language === "de") return exercise.germanName;
-    return exercise.englishName;
-}
-
 const ExerciseInputCard = (props: Props) => {
-    const {exerciseId, value, onChange, useMinView} = props;
+    const {exerciseId, onChange, useMinView} = props;
     const {i18n} = useTranslation();
-    const uid: string = useOutletContext();
+    const user = useUser();
+    const uid = user?.data?.uid;
     const firestore = useFirestore();
 
     const [exercise, setExercise] = useState<Exercise | null>(null);
@@ -35,20 +26,26 @@ const ExerciseInputCard = (props: Props) => {
     useEffect(() => {
         if (exerciseId) {
             // get general data of the exercise
-            getDoc(doc(collection(firestore, 'exercise'), exerciseId)).then(
-                (docSnap: any) => {
-                    if (docSnap.exists()) {
-                        setExercise(docSnap.data());
-                    }
-                }
-            );
+            getDocs(query(
+                collection(firestore, 'exercises'),
+                where('id', '==', exerciseId)
+            ))
+                .then((querySnap) => {
+                    querySnap.forEach((doc: any) => {
+                        if (doc.exists()) {
+                            console.log(doc.data());
+                            setExercise(doc.data());
+                        }
+                    });
+                });
+
 
             // get the latest weight and duration of the exercise
-            const userRef = doc(collection(firestore, 'users'), uid);
-            const exerciseRef = doc(collection(userRef, 'exercises'), exerciseId);
-            const recordsRef = collection(exerciseRef, 'records');
-            const q = query(recordsRef, orderBy("timestamp"), limit(1));
-            getDocs(q).then((querySnap) => {
+            getDocs(query(
+                collection(firestore, `users/${uid}/exercises/${exerciseId}/records`),
+                orderBy("timestamp", 'desc'),
+                limit(1)
+            )).then((querySnap) => {
                 if (!querySnap.empty) {
                     querySnap.forEach((doc) => {
                         const data = doc.data();
@@ -60,10 +57,9 @@ const ExerciseInputCard = (props: Props) => {
         }
     }, [exerciseId]);
 
-    const title = getExerciseName(exercise, i18n.language) ?? '';
+    const title = getName(exercise, i18n.language) ?? '';
 
     return <Card
-        value={value}
         onChange={onChange}
         title={title}
         images={exercise?.images}

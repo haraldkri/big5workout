@@ -8,6 +8,7 @@ import {useEffect, useState} from "react";
 import ExercisePickerModal from "../ExercisePickerModal";
 import {Center, Grow} from "../StyledComponents";
 import {useTranslation} from "react-i18next";
+import {ExerciseValue} from "../../types.ts";
 
 const ExerciseTitle = styled.h5`
   color: ${({theme}) => theme.colorPrimary};
@@ -54,11 +55,8 @@ const CustomDivider = styled(Divider)`
 `;
 
 export type Props = {
-    value?: {
-        weight: number,
-        duration: number
-    },
-    onChange?: (value: { weight: number, duration: number }) => void,
+    value?: ExerciseValue,
+    onChange?: (value: ExerciseValue) => void,
     useMinView?: boolean,
     title?: string,
     latestWeight?: number,
@@ -84,33 +82,24 @@ type ModalConfig = {
 
 const defaultWeight = 0;
 const defaultDuration = 90;
-const defaultValue = {weight: defaultWeight, duration: defaultDuration}
 
 const Card = (props: Props) => {
-    const {useMinView, value, onChange, images, title, latestDuration, latestWeight} = props;
+    const {useMinView, onChange, images, title, latestDuration, latestWeight} = props;
     const {t} = useTranslation();
 
-    const [weight, setWeight] = useState<string>(formatWeight(value?.weight ?? latestWeight ?? defaultWeight));
-    const [duration, setDuration] = useState<string>(formatSeconds(value?.duration ?? latestDuration ?? defaultDuration));
+    const [weight, setWeight] = useState<string | undefined>(undefined);
+    const [duration, setDuration] = useState<string | undefined>(undefined);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalPickerConfig, setModalPickerConfig] = useState<ModalConfig | undefined>(undefined);
 
-    const onValueChange = (name: "weight" | "duration", newValue: number) => {
-        if (name && newValue && onChange) onChange({
-            ...(value ?? defaultValue),
-            [name]: newValue
-        })
-    };
-
     useEffect(() => {
-        if (value) {
-            const weight = value.weight ?? latestWeight ?? defaultWeight;
-            setWeight(formatWeight(weight));
-
-            const duration = value.duration ?? latestDuration ?? defaultDuration;
-            setDuration(formatSeconds(duration));
+        if (onChange) {
+            onChange({
+                weight: weight ? reverseFormatWeight(weight) : undefined,
+                duration: duration ? reverseFormatSeconds(duration) : undefined
+            });
         }
-    }, [value]);
+    }, [weight, duration]);
 
     const handleImageClick = (link: string) => {
         window.open(link, '_blank');
@@ -129,7 +118,7 @@ const Card = (props: Props) => {
         } else if (name === 'duration') {
             setModalPickerConfig({
                 type: 'duration',
-                value: reverseFormatSeconds(duration ?? defaultDuration)
+                value: duration ? reverseFormatSeconds(duration) : defaultDuration
             })
         }
 
@@ -137,11 +126,8 @@ const Card = (props: Props) => {
     }
 
     const handleModalClose = (type: "weight" | "duration", newValue: number) => {
-        if (type === 'weight') {
-            onValueChange(type, Number(newValue));
-        } else if (type === 'duration') {
-            onValueChange(type, Number(newValue));
-        }
+        if (type === 'weight') setWeight(formatWeight(newValue));
+        else if (type === 'duration') setDuration(formatSeconds(newValue));
 
         setModalOpen(false);
     }
@@ -176,11 +162,9 @@ const Card = (props: Props) => {
         </InputRow>
         <InputRow>
             <Input placeholder={formatWeight(latestWeight ?? defaultWeight)} value={weight} suffix={"kg"}
-                   onChange={(e) => onValueChange("weight", Number(e.target.value))}
                    onClick={() => handleInputClick("weight")}/>
             <CustomDivider type="vertical"/>
             <Input placeholder={formatSeconds(latestDuration ?? defaultDuration)} value={duration} suffix={"m:ss"}
-                   onChange={(e) => onValueChange("duration", Number(e.target.value))}
                    onClick={() => handleInputClick("duration")}/>
         </InputRow>
         <ExercisePickerModal
