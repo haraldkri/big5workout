@@ -61,7 +61,7 @@ const AppRouter = () => {
                                         }
                                     },
                                     {
-                                        path: ":id",
+                                        path: ":exerciseKey",
                                         errorElement: <ErrorView/>,
                                         element: <Workout/>,
                                         handle: {

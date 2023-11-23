@@ -10,6 +10,7 @@ export type ExerciseValue = {
 }
 
 export type Workout = {
+    key: string,
     germanName: string,
     englishName: string,
     exerciseIds: string[],

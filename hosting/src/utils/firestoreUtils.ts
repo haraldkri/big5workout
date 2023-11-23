@@ -7,6 +7,7 @@ export const addDefaultWorkout = (firestore: Firestore, uid: string) => {
     addDoc(
         collection(firestore, `users/${uid}/workouts`),
         {
+            key: "default-training",
             germanName: "Default Training",
             englishName: "Default Workout",
             exerciseIds: defaultWorkoutExerciseIds,

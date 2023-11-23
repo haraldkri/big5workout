@@ -6,7 +6,7 @@ import {collection, getDocs, limit, orderBy, query} from "firebase/firestore";
 import {useFirestore, useUser} from "reactfire";
 import {getName} from "../../../utils/languageKeySelect.ts";
 import {useEffect, useState} from "react";
-import {WorkoutWithId} from "../../../types.ts";
+import {Workout} from "../../../types.ts";
 
 const WorkoutSelectList = () => {
     const navigate = useNavigate();
@@ -14,25 +14,22 @@ const WorkoutSelectList = () => {
     const firestore = useFirestore();
     const user = useUser();
     const uid = user?.data?.uid;
-    const [workoutList, setWorkoutList] = useState<WorkoutWithId[]>([]);
+    const [workoutList, setWorkoutList] = useState<Workout[]>([]);
 
     useEffect(() => {
+        if (!uid) return;
         getDocs(query(
             collection(firestore, `users/${uid}/workouts`),
             orderBy("lastUsed", 'desc'),
             limit(20)
         )).then((docSnap) => {
-            setWorkoutList(docSnap.docs.map((doc: any) => {
-                return {
-                    id: doc.id,
-                    ...doc.data()
-                }
-            }));
+            if (docSnap.empty) return console.log('no workouts found');
+            setWorkoutList(docSnap.docs.map((doc: any) => doc.data()));
         });
     }, [uid, firestore]);
 
-    const onWorkoutSelect = (workoutId: string) => {
-        navigate(`/app/workout/${workoutId}`);
+    const onWorkoutSelect = (workoutKey: string) => {
+        navigate(`/app/workout/${workoutKey}`);
     }
 
     return (
@@ -41,11 +38,11 @@ const WorkoutSelectList = () => {
                 {
                     workoutList.map((workout: any) => {
                         const name = getName(workout, i18n.language);
-                        const id = workout.id;
+                        const key = workout.key;
                         return (
-                            <Button key={id} data-cy={`workout-${id}`} type={"primary"}
+                            <Button key={key} data-cy={`workout-${key}`} type={"primary"}
                                     size={"large"} ghost={true} title={name}
-                                    onClick={() => onWorkoutSelect(id)}>
+                                    onClick={() => onWorkoutSelect(key)}>
                                 {name}
                             </Button>
                         )

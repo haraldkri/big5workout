@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import {Outlet, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import AddRecordForm from "../../../components/AddRecordForm";
-import {useFirestore, useFirestoreDocData, useUser} from "reactfire";
-import {doc} from "firebase/firestore";
+import {useFirestore, useFirestoreCollectionData, useUser} from "reactfire";
+import {collection, query, where} from "firebase/firestore";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorView from "../../../components/ErrorView";
 
@@ -10,13 +10,16 @@ const Wrapper = styled.div``;
 
 const Workout = () => {
     //get the workout id from useParam hook
-    const {id} = useParams();
+    const {exerciseKey} = useParams();
     const firestore = useFirestore();
     const user = useUser();
     const uid = user?.data?.uid;
 
-    const {data, status} = useFirestoreDocData(
-        doc(firestore, `users/${uid}/workouts/${id}`),
+    const {data, status} = useFirestoreCollectionData(
+        query(
+            collection(firestore, `users/${uid}/workouts`),
+            where('key', '==', exerciseKey)
+        )
     );
 
     if (status === 'loading') return <LoadingSpinner/>
