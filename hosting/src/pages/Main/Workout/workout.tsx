@@ -9,7 +9,6 @@ import ErrorView from "../../../components/ErrorView";
 const Wrapper = styled.div``;
 
 const Workout = () => {
-    //get the workout id from useParam hook
     const {exerciseKey} = useParams();
     const firestore = useFirestore();
     const user = useUser();
