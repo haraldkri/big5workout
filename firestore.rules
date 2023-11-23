@@ -9,16 +9,50 @@ service cloud.firestore {
       && (resource.data[key] == request.resource.data[key]);
   }
 
+  function isUser() {
+    return request.auth != null //&& request.resource.data.userId == request.auth.uid;
+  }
+
   match /databases/{database}/documents {
-    // Restaurants:
+    // Exercises:
     //   - Authenticated user can read
     //   - Authenticated user can create/update (for demo purposes only)
     //   - Updates are allowed if no fields are added and name is unchanged
     //   - Deletes are not allowed (default)
     match /exercises/{exerciseId} {
       allow read;
-      allow create: if true // if request.auth != null;
-      allow update: if true // if request.auth != null && unchanged("name");
+      allow create: if true; // if userId is adminId
+      allow update: if true; // if userId is adminId
+      allow delete: if false; // if userId is adminId
+    }
+
+    // Users:
+    //   - Authenticated user can read, create, update, delete
+    //   - Updates are allowed if the name is unchanged
+    match /users/{userId} {
+      allow read: if isUser();
+      allow create: if isUser();
+      allow update: if isUser() && unchanged("name");
+      allow delete: if isUser();
+
+        // Allow users to add new exercises to their own data
+        match /exercises/{exerciseId} {
+          allow read;
+          allow create: if request.auth != null;
+
+            // Allow users to update their own data
+            match /records/{recordId} {
+              allow read: if isUser();
+              allow create: if isUser();
+              allow update: if isUser();
+            }
+        }
+
+        match /workouts/{workoutId} {
+          allow read: if isUser();
+          allow create: if isUser();
+          allow update: if isUser();
+        }
     }
   }
 }
