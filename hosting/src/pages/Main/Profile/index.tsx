@@ -5,6 +5,8 @@ import styled from "styled-components";
 import {MailOutlined, UserOutlined} from "@ant-design/icons";
 import ContentCard from "../../../components/ContentCard";
 import {useNavigate} from "react-router-dom";
+import {useContext} from "react";
+import {UserContext} from "../../../context/UserContext.ts";
 
 const Extra = styled.div`
   flex-grow: 1;
@@ -17,6 +19,7 @@ const Extra = styled.div`
 const Profile = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const {logout} = useContext(UserContext);
 
     return (
         <AppPageWrapper data-cy={'profile-page'}>
@@ -28,7 +31,7 @@ const Profile = () => {
             </CenterInline>
             <CenterInline>
                 <Button type={"primary"} danger={true} size={"large"} ghost={true} title={t("Logout")}
-                        data-cy="logout-button">
+                        data-cy="logout-button" onClick={logout}>
                     {t("Logout")}
                 </Button>
             </CenterInline>
