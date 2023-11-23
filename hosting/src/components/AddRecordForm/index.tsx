@@ -41,8 +41,6 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
     }
 
     const onFinish = async (values: any) => {
-        message.success('Successfully added new preference:');
-
         setLoading(true);
         const promises = [];
         for (const [exerciseId, value] of Object.entries(values as Values)) {
