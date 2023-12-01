@@ -7,6 +7,7 @@ import ContentCard from "../../../components/ContentCard";
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {UserContext} from "../../../context/UserContext.ts";
+import RecordsExportButton from "../../../components/RecordsExportButton";
 
 const Extra = styled.div`
   flex-grow: 1;
@@ -24,10 +25,7 @@ const Profile = () => {
     return (
         <AppPageWrapper data-cy={'profile-page'}>
             <CenterInline>
-                <Button type={"primary"} size={"large"} ghost={true} title={t("Export to Google Sheets")}
-                        data-cy="data-export-button">
-                    {t("Export to Google Sheets")}
-                </Button>
+                <RecordsExportButton/>
             </CenterInline>
             <CenterInline>
                 <Button type={"primary"} danger={true} size={"large"} ghost={true} title={t("Logout")}
