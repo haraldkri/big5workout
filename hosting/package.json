@@ -18,12 +18,15 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "deploy": "NODE_ENV=production firebase deploy --only hosting"
   },
   "dependencies": {
+    "googleapis": "^128.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-mobile-picker": "^1.0.0"
+    "react-mobile-picker": "^1.0.0",
+    "reactfire": "^4.2.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",

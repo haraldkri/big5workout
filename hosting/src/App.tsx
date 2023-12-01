@@ -2,8 +2,8 @@ import {useEffect} from "react";
 import {connectAuthEmulator, getAuth} from 'firebase/auth';
 import {connectFirestoreEmulator, getFirestore} from 'firebase/firestore';
 // import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
-import {connectStorageEmulator, getStorage} from 'firebase/storage';
-import {AuthProvider, FirestoreProvider, StorageProvider, useFirebaseApp,} from 'reactfire';
+// import {connectStorageEmulator, getStorage} from 'firebase/storage';
+import {AuthProvider, FirestoreProvider, useFirebaseApp,} from 'reactfire';
 import AppRouter from "./AppRouter.tsx";
 
 import {I18nextProvider, useTranslation} from "react-i18next";
@@ -12,22 +12,21 @@ import moment from "moment";
 function App() {
     const app = useFirebaseApp();
     const firestoreInstance = getFirestore(app);
-    const storageInstance = getStorage(app);
     const authInstance = getAuth(app);
+    //const storageInstance = getStorage(app);
     // const functionsInstance = getFunctions(app);
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         try {
             // Set up emulators
-            connectStorageEmulator(storageInstance, '127.0.0.1', 9199);
+            //connectStorageEmulator(storageInstance, '127.0.0.1', 9199);
+            // connectFunctionsEmulator(functionsInstance, '127.0.0.1', 5001);
             connectAuthEmulator(authInstance, 'http://127.0.0.1:9099', {
                 disableWarnings: true,
             });
             connectFirestoreEmulator(firestoreInstance, '127.0.0.1', 8080);
-            // connectFunctionsEmulator(functionsInstance, '127.0.0.1', 5001);
         } catch (e) {
             console.log(e)
         }
-
     }
 
     const {i18n} = useTranslation();
@@ -41,13 +40,13 @@ function App() {
     return (
         <I18nextProvider i18n={i18n}>
             <FirestoreProvider sdk={firestoreInstance}>
-                <StorageProvider sdk={storageInstance}>
-                    <AuthProvider sdk={authInstance}>
-                        {/*<FunctionsProvider sdk={functionsInstance}>*/}
-                        <AppRouter/>
-                        {/*</FunctionsProvider>*/}
-                    </AuthProvider>
-                </StorageProvider>
+                {/*<StorageProvider sdk={storageInstance}>*/}
+                {/*<FunctionsProvider sdk={functionsInstance}>*/}
+                <AuthProvider sdk={authInstance}>
+                    <AppRouter/>
+                </AuthProvider>
+                {/*</FunctionsProvider>*/}
+                {/*</StorageProvider>*/}
             </FirestoreProvider>
         </I18nextProvider>
     );

@@ -2,6 +2,9 @@
   "dependencies": {
     "firebase": "^9.22.1",
     "react-router-dom": "^6.15.0",
-    "reactfire": "^4.2.2"
+    "reactfire": "^4.2.3"
+  },
+  "scripts": {
+    "deploy": "firebase deploy --only hosting"
   }
 }
