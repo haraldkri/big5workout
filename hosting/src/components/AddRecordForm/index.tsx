@@ -65,7 +65,7 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
         }
     };
 
-    return (
+    return (//todo: make the workout page have an active state (so that when user switches to another tab, the workout is not lost)
         <div>
             <Form
                 name="addWorkoutRecordForm"
@@ -86,7 +86,7 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
                 }
                 <Form.Item wrapperCol={{offset: 8, span: 16}}>
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        {t('Finish Workout')}
                     </Button>
                 </Form.Item>
             </Form>
