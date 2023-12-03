@@ -35,7 +35,7 @@ const UserProvider: React.FC<PropsWithChildren> = ({children}) => {
                 getDocs(collection(firestore, `users/${_response.user.uid}/workouts`))
                     .then(
                         (docSnap: any) => {
-                            if (!docSnap.exists() || docSnap.empty) {
+                            if (docSnap.empty) {
                                 //add default workout to firestore for new users
                                 addDefaultWorkout(firestore, _response.user.uid);
                             }
