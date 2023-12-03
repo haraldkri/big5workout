@@ -19,7 +19,8 @@
     "build-storybook": "storybook build",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "deploy": "NODE_ENV=production firebase deploy --only hosting"
+    "deploy:prod:hosting": "NODE_ENV=production firebase deploy --only hosting",
+    "deploy:prod:rules": "NODE_ENV=production firebase deploy --only firestore:rules"
   },
   "dependencies": {
     "googleapis": "^128.0.0",

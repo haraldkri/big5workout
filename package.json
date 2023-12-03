@@ -5,6 +5,7 @@
     "reactfire": "^4.2.3"
   },
   "scripts": {
-    "deploy": "firebase deploy --only hosting"
+    "deploy:prod:hosting": "NODE_ENV=production firebase deploy --only hosting",
+    "deploy:prod:rules": "NODE_ENV=production firebase deploy --only firestore:rules"
   }
 }

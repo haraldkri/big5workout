@@ -9,8 +9,8 @@ service cloud.firestore {
       && (resource.data[key] == request.resource.data[key]);
   }
 
-  function isUser() {
-    return request.auth != null //&& request.resource.data.userId == request.auth.uid;
+  function isAdmin() {
+    return get(/databases/$(database)/documents/users/$(request.auth.uid)).role == 'admin';
   }
 
   match /databases/{database}/documents {
@@ -21,24 +21,29 @@ service cloud.firestore {
     //   - Deletes are not allowed (default)
     match /exercises/{exerciseId} {
       allow read;
-      allow create: if true; // if userId is adminId
-      allow update: if true; // if userId is adminId
-      allow delete: if false; // if userId is adminId
+      allow create: if isAdmin(); // if userId is adminId
+      allow update: if isAdmin(); // if userId is adminId
+      allow delete: if isAdmin(); // if userId is adminId
     }
 
     // Users:
     //   - Authenticated user can read, create, update, delete
     //   - Updates are allowed if the name is unchanged
     match /users/{userId} {
+    
+      function isUser() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      
       allow read: if isUser();
-      allow create: if isUser();
-      allow update: if isUser() && unchanged("name");
+      allow create;
+      allow update: if isUser();
       allow delete: if isUser();
 
         // Allow users to add new exercises to their own data
         match /exercises/{exerciseId} {
-          allow read;
-          allow create: if request.auth != null;
+          allow read: if isUser();
+          allow create: if isUser();
 
             // Allow users to update their own data
             match /records/{recordId} {
