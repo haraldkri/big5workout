@@ -16,7 +16,6 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "deploy:prod:hosting": "NODE_ENV=production firebase deploy --only hosting",
