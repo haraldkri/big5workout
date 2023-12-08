@@ -1,4 +1,4 @@
-import {Button} from "antd";
+import {Alert, Button} from "antd";
 import {AppPageWrapper, CenterInline} from "../../../components/StyledComponents";
 import {useTranslation} from "react-i18next";
 import styled from "styled-components";
@@ -8,6 +8,8 @@ import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {UserContext} from "../../../context/UserContext.ts";
 import RecordsExportButton from "../../../components/RecordsExportButton";
+import {useFirestore, useFirestoreDocData, useUser} from "reactfire";
+import {doc} from "firebase/firestore";
 
 const Extra = styled.div`
   flex-grow: 1;
@@ -21,11 +23,33 @@ const Profile = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
     const {logout} = useContext(UserContext);
+    const firestore = useFirestore();
+    const user = useUser();
+    const uid = user?.data?.uid;
+    const userRef = doc(firestore, `users/${uid}`);
+    const {data, status} = useFirestoreDocData(userRef);
+
+    const userSheetUrl = data?.sheet?.url;
 
     return (
         <AppPageWrapper data-cy={'profile-page'}>
             <CenterInline>
-                <RecordsExportButton/>
+                <RecordsExportButton disabled={!!userSheetUrl} loading={status === "loading"}/>
+                {
+                    userSheetUrl && <Alert
+                        message={t("Successfully created Google Sheet")}
+                        description={
+                            <>
+                                {t("Use the link below to access the sheet. The created sheet is available for one hour. You can of course simply create a copy to have permanent access to the sheet.")}
+                                <Button type="link"
+                                        onClick={() => window.open(userSheetUrl, "_blank")}>
+                                    {t("Google Sheet")}
+                                </Button>
+                            </>
+                        }
+                        type="success"
+                    />
+                }
             </CenterInline>
             <CenterInline>
                 <Button type={"primary"} danger={true} size={"large"} ghost={true} title={t("Logout")}
