@@ -42,8 +42,10 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
 
     const onFinish = async (values: any) => {
         setLoading(true);
-        const promises = [];
+        const promises: Promise<any>[] = [];
         for (const [exerciseId, value] of Object.entries(values as Values)) {
+            if (!value || !value.duration || !value.weight) continue;
+
             const recordCollection = collection(firestore, `users/${uid}/exercises/${exerciseId}/records`);
             promises.push(addDoc(recordCollection, {
                 timestamp: new Date().getTime(),
