@@ -25,3 +25,26 @@ export const createDefaultUserWorkouts = auth.user().onCreate((user) => {
     addDefaultWorkout(admin.firestore(), uid);
     logger.info(`Created default workout for user ${user.displayName}`);
 })
+
+export const createUserRecordsSheet = onCall(async (request) => {
+    const uid = request.data.uid;
+    logger.info("Creating new google sheet for user ", uid);
+    try {
+        // use service account credentials for authentication
+        const auth = new google.auth.GoogleAuth({
+            credentials: ServiceAccount,
+            scopes: SCOPES
+        })
+
+        const oAuth2Client = await auth.getClient();
+
+        const sheetUrl = await createNewGoogleSheet(admin.firestore(), oAuth2Client, uid);
+
+        addSheetToUser(admin.firestore(), sheetUrl, request.data.uid);
+
+        return sheetUrl;
+    } catch (e) {
+        console.error('Error creating google sheet', e);
+        return undefined;
+    }
+})
