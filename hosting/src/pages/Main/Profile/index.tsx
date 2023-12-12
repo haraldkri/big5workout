@@ -19,6 +19,10 @@ const Extra = styled.div`
   gap: 20px;
 `;
 
+const FlexSpace = styled(Space)`
+  display: flex;
+`;
+
 const Profile = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -35,7 +39,7 @@ const Profile = () => {
         <AppPageWrapper data-cy={'profile-page'}>
             <CenterInline>
                 {/*todo: After updating the sheet deletion logic in the functions add the following back again: disabled={!!userSheetUrl}*/}
-                <Space direction={"vertical"} size={"large"}>
+                <FlexSpace direction={"vertical"} align={"center"}>
                     <RecordsExportButton loading={status === "loading"}/>
                     {
                         userSheetUrl && <Alert
@@ -52,7 +56,7 @@ const Profile = () => {
                             type="success"
                         />
                     }
-                </Space>
+                </FlexSpace>
             </CenterInline>
             <CenterInline>
                 <Button type={"primary"} danger={true} size={"large"} ghost={true} title={t("Logout")}
