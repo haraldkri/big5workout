@@ -3,7 +3,7 @@ import {Button, Form, message} from 'antd';
 import ExerciseInputCard from "../ExerciseInputCard";
 import {ExerciseValue} from "../../types.ts";
 import {useFirestore, useUser} from "reactfire";
-import {addDoc, collection} from "firebase/firestore";
+import {addDoc, collection, doc, updateDoc} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
@@ -46,11 +46,25 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
         for (const [exerciseId, value] of Object.entries(values as Values)) {
             if (!value || !value.duration || !value.weight) continue;
 
+            // Add the record to the records collection
             const recordCollection = collection(firestore, `users/${uid}/exercises/${exerciseId}/records`);
-            promises.push(addDoc(recordCollection, {
-                timestamp: new Date().getTime(),
-                ...value
-            }));
+            promises.push(
+                addDoc(recordCollection, {
+                    timestamp: new Date().getTime(),
+                    ...value
+                })
+            );
+
+            // Update the latest record entry in the exercises collection
+            const latestRecordEntry = doc(firestore, `users/${uid}/exercises/${exerciseId}`);
+            promises.push(
+                updateDoc(latestRecordEntry, {
+                    latestRecord: {
+                        timestamp: new Date().getTime(),
+                        ...value
+                    }
+                })
+            );
         }
 
         try {

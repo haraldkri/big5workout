@@ -1,4 +1,4 @@
-import {Alert, Button} from "antd";
+import {Alert, Button, Space} from "antd";
 import {AppPageWrapper, CenterInline} from "../../../components/StyledComponents";
 import {useTranslation} from "react-i18next";
 import styled from "styled-components";
@@ -34,22 +34,25 @@ const Profile = () => {
     return (
         <AppPageWrapper data-cy={'profile-page'}>
             <CenterInline>
-                <RecordsExportButton disabled={!!userSheetUrl} loading={status === "loading"}/>
-                {
-                    userSheetUrl && <Alert
-                        message={t("Successfully created Google Sheet")}
-                        description={
-                            <>
-                                {t("Use the link below to access the sheet. The created sheet is available for one hour. You can of course simply create a copy to have permanent access to the sheet.")}
-                                <Button type="link"
-                                        onClick={() => window.open(userSheetUrl, "_blank")}>
-                                    {t("Google Sheet")}
-                                </Button>
-                            </>
-                        }
-                        type="success"
-                    />
-                }
+                {/*todo: After updating the sheet deletion logic in the functions add the following back again: disabled={!!userSheetUrl}*/}
+                <Space direction={"vertical"} size={"large"}>
+                    <RecordsExportButton loading={status === "loading"}/>
+                    {
+                        userSheetUrl && <Alert
+                            message={t("Successfully created Google Sheet")}
+                            description={
+                                <>
+                                    {t("Use the link below to access the sheet. The created sheet is available for one hour. You can of course simply create a copy to have permanent access to the sheet.")}
+                                    <Button type="link"
+                                            onClick={() => window.open(userSheetUrl, "_blank")}>
+                                        {t("Google Sheet")}
+                                    </Button>
+                                </>
+                            }
+                            type="success"
+                        />
+                    }
+                </Space>
             </CenterInline>
             <CenterInline>
                 <Button type={"primary"} danger={true} size={"large"} ghost={true} title={t("Logout")}

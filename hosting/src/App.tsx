@@ -12,7 +12,7 @@ function App() {
     const app = useFirebaseApp();
     const firestoreInstance = getFirestore(app);
     const authInstance = getAuth(app);
-    const functionsInstance = getFunctions(app);
+    const functionsInstance = getFunctions(app, 'us-central1');
     //const storageInstance = getStorage(app);
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         try {

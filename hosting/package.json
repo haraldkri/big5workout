@@ -19,7 +19,8 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "deploy:prod:hosting": "NODE_ENV=production firebase deploy --only hosting",
-    "deploy:prod:rules": "NODE_ENV=production firebase deploy --only firestore:rules"
+    "deploy:prod:rules": "NODE_ENV=production firebase deploy --only firestore:rules",
+    "deploy:prod:functions": "NODE_ENV=production firebase deploy --only functions"
   },
   "dependencies": {
     "googleapis": "^128.0.0",

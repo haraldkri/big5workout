@@ -36,7 +36,7 @@ service cloud.firestore {
       }
       
       allow read: if isUser();
-      allow create;
+      allow create: if isUser();
       allow update: if isUser();
       allow delete: if isUser();
 
