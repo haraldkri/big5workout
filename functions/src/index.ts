@@ -7,20 +7,25 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {auth} from "firebase-functions";
+import {region} from "firebase-functions";
 import admin from "firebase-admin";
 import addDefaultWorkout, {addDefaultUserInformation} from "./utils/addDefaultData";
 import {google} from "googleapis";
-import {addSheetToUser, createNewGoogleSheet, SCOPES, ServiceAccount} from "./utils/googleSheetsApi";
-import {onCall} from "firebase-functions/v2/https";
-import {logger} from "firebase-functions/v2";
+import {addSheetToUser, createNewGoogleSheet, deleteSheetById, ServiceAccount} from "./utils/googleSheetsApi";
+import {onCall, onRequest} from "firebase-functions/v2/https";
+import {logger, setGlobalOptions} from "firebase-functions/v2";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
 admin.initializeApp();
 
-export const createDefaultUserWorkouts = auth.user().onCreate((user) => {
+// declare region for all firebase v2 functions
+setGlobalOptions({region: 'europe-west3'});
+// create function to declare region for all firebase v1 functions
+const regionalFunctions = region("europe-west3");
+
+export const createDefaultUserWorkouts = regionalFunctions.auth.user().onCreate((user) => {
     const uid = user.uid;
     addDefaultUserInformation(admin.firestore(), user);
     addDefaultWorkout(admin.firestore(), uid);
@@ -38,7 +43,11 @@ export const createUserRecordsSheet = onCall(async (request) => {
         // use service account credentials for authentication
         const auth = new google.auth.GoogleAuth({
             credentials: ServiceAccount,
-            scopes: SCOPES,
+            scopes: [
+                "https://www.googleapis.com/auth/spreadsheets",
+                "https://www.googleapis.com/auth/drive",
+
+            ],
         });
 
         const oAuth2Client = await auth.getClient();
@@ -55,5 +64,25 @@ export const createUserRecordsSheet = onCall(async (request) => {
             uid,
             error: e
         };
+    }
+});
+
+// if the name of handleSheetDeletion is changed please also change the name of scheduleSheetDeletion in ./utils/googleSheetsApi.ts
+export const handleSheetDeletion = onRequest(async (req, res) => {
+    const {uid, sheetId} = req.body;
+
+    const auth = new google.auth.GoogleAuth({
+        credentials: ServiceAccount,
+        scopes: ["https://www.googleapis.com/auth/drive"],
+    });
+
+    const oAuth2Client = await auth.getClient();
+
+    try {
+        await deleteSheetById(admin.firestore(), uid, oAuth2Client, sheetId); // Replace YOUR_AUTH with your authentication mechanism
+        res.status(200).send('Sheet deleted successfully.');
+    } catch (error) {
+        console.error("Error deleting google sheet:", error);
+        res.status(500).send('Error deleting google sheet.');
     }
 });

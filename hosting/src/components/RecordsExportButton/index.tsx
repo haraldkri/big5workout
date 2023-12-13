@@ -13,6 +13,8 @@ const RecordsExportButton: FC<Props> = ({disabled, loading}) => {
     const {t} = useTranslation();
     const uid: string = useOutletContext();
     const functions = getFunctions();
+    // define region again, because it is not set for some reason
+    functions.region = "europe-west3";
     const createRecordsSheet = httpsCallable(functions, 'createUserRecordsSheet');
 
     const handleOnClick = async () => {

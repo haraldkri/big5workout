@@ -1,20 +1,16 @@
-import {google} from "googleapis";
 import ServiceAccount from "../../../credentials/serviceAccount.json";
 import {firestore} from "firebase-admin";
+import {CloudTasksClient} from "@google-cloud/tasks";
+import {google as googleCloud} from "@google-cloud/tasks/build/protos/protos";
+import {google} from "googleapis";
 import Firestore = firestore.Firestore;
+import ITask = googleCloud.cloud.tasks.v2.ITask;
 
 export {ServiceAccount};
 
-export const SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive"
-];
-
-export async function createRecordsSheet(firestore: Firestore, auth: any, uid: string) {
+async function createRecordsSheet(firestore: Firestore, auth: any, uid: string) {
     const sheets = google.sheets({version: "v4", auth});
     const recordsData = await getUserRecordsData(firestore, uid);
-
-    console.info("recordsData", recordsData)
 
     return sheets.spreadsheets.create({
         requestBody: {
@@ -79,26 +75,67 @@ export async function createRecordsSheet(firestore: Firestore, auth: any, uid: s
     });
 }
 
+async function scheduleSheetDeletion(firestore: Firestore, uid: string, spreadsheetId: string) {
+    // Instantiates a client.
+    const client = new CloudTasksClient();
+    const project = ServiceAccount.project_id;
+    const queue = 'sheet-deletion-queue';
+    const location = 'europe-west3';
+    const url = `https://${ServiceAccount.project_id}.cloudfunctions.net/handleSheetDeletion`;
+    const serviceAccountEmail = ServiceAccount.client_email;
+    const payload = Buffer.from(JSON.stringify({uid, sheetId: spreadsheetId})).toString('base64');
+
+    // Create a timestamp for 1 hour later
+    const oneHourLater = new Date();
+    oneHourLater.setHours(oneHourLater.getHours() + 1);
+
+    // Construct the fully qualified queue name.
+    const parent = client.queuePath(project, location, queue);
+
+    const task: ITask = {
+        httpRequest: {
+            httpMethod: 'POST',
+            url,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            oidcToken: {
+                serviceAccountEmail,
+            },
+        },
+        scheduleTime: {
+            seconds: oneHourLater.getTime() / 1000,
+        }
+    };
+
+    if (payload) {
+        task.httpRequest!.body = Buffer.from(payload).toString('base64');
+    }
+
+    console.log('Sending task:');
+    console.log(task);
+    // Send create task request.
+    const request = {parent: parent, task: task};
+    const [response] = await client.createTask(request);
+    const name = response.name;
+    console.log(`Created task ${name}`);
+    return Promise.resolve();
+}
+
 /**
  * Creates a new google sheet and returns the URL
  */
 export async function createNewGoogleSheet(firestore: Firestore, auth: any, uid: string) {
     const spreadsheet = await createRecordsSheet(firestore, auth, uid);
     const {spreadsheetId, spreadsheetUrl} = spreadsheet.data;
-
-    if (!spreadsheetId || !spreadsheetUrl) throw new Error("Sheet ID not found");
-    console.info("Spreadsheet created: ", spreadsheetId);
+    if (!spreadsheetId || !spreadsheetUrl) throw new Error("Error while creating sheet. SpreadsheetId or SpreadsheetUrl is undefined");
+    else console.info("Sheet created successfully.");
 
     // Schedule deletion of the sheet after 1 hour using setTimeout
-    setTimeout(async () => {
-        deleteSheetById(firestore, uid, auth, spreadsheetId)
-            .then(() => {
-                console.info("Sheet deleted successfully.");
-            })
-            .catch((error: any) => {
-                console.error("Error deleting google sheet:", error);
-            });
-    }, 60 * 60 * 1000);
+    scheduleSheetDeletion(firestore, uid, spreadsheetId)
+        .catch((error: any) => {
+            console.error("Error scheduling the deletion of google sheet:", error);
+        });
 
     return {
         spreadsheetId,
@@ -106,7 +143,7 @@ export async function createNewGoogleSheet(firestore: Firestore, auth: any, uid:
     };
 }
 
-async function deleteSheetById(firestore: Firestore, uid: string, auth: any, sheetId: string) {
+export async function deleteSheetById(firestore: Firestore, uid: string, auth: any, sheetId: string) {
     // Delete the file
     const drive = google.drive({version: "v3", auth});
     const response = await drive.files.delete({
