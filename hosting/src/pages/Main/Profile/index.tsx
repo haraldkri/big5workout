@@ -54,6 +54,7 @@ const Profile = () => {
                                 </>
                             }
                             type="success"
+                            showIcon
                         />
                     }
                 </FlexSpace>
