@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import ContentCard from "../components/ContentCard";
 import {SmallLogoWithText} from "../components/svg";
-import {Button} from "antd";
+import {Button, Modal, Result} from "antd";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {Content} from "../components/StyledComponents";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {UserContext} from "../context/UserContext.ts";
 
 const Wrapper = styled.div`
@@ -38,9 +38,28 @@ const Home = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
     const {login} = useContext(UserContext)
+    const [modalVisible, setModalVisible] = useState(!localStorage.getItem("inDevModalShown"));
+
+    const closeModal = () => {
+        setModalVisible(false);
+        localStorage.setItem("inDevModalShown", "true");
+    }
 
     return (
         <Wrapper data-cy='landing-page'>
+            <Modal open={modalVisible} onOk={closeModal} onCancel={closeModal}>
+                <Result
+                    title="This project is still in development."
+                    extra={
+                        [
+                            "You are welcome to try it out, but please be aware that some key functionalities may not be implemented yet.",
+                            <br/>,
+                            <br/>,
+                            "This website is currently developed for mobile only."
+                        ]
+                    }
+                />
+            </Modal>
             <ContentCard>
                 <SmallLogoWithText/>
                 <IntroText>
