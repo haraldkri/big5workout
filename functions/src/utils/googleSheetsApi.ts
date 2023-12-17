@@ -79,11 +79,12 @@ async function scheduleSheetDeletion(firestore: Firestore, uid: string, spreadsh
     // Instantiates a client.
     const client = new CloudTasksClient();
     const project = ServiceAccount.project_id;
+    const region = 'europe-west3';
     const queue = 'sheet-deletion-queue';
     const location = 'europe-west3';
-    const url = `https://${ServiceAccount.project_id}.cloudfunctions.net/handleSheetDeletion`;
+    const url = `https://${region}-${ServiceAccount.project_id}.cloudfunctions.net/handleSheetDeletion`;
     const serviceAccountEmail = ServiceAccount.client_email;
-    const payload = Buffer.from(JSON.stringify({uid, sheetId: spreadsheetId})).toString('base64');
+    const payload = JSON.stringify({uid, sheetId: spreadsheetId});
 
     // Create a timestamp for 1 hour later
     const oneHourLater = new Date();
