@@ -82,7 +82,7 @@ async function scheduleSheetDeletion(firestore: Firestore, uid: string, spreadsh
     const region = 'europe-west3';
     const queue = 'sheet-deletion-queue';
     const location = 'europe-west3';
-    const url = `https://${region}-${ServiceAccount.project_id}.cloudfunctions.net/handleSheetDeletion`;
+    const url = `https://${region}-${ServiceAccount.project_id}.cloudfunctions.net/deleteUserRecordsSheet`;
     const serviceAccountEmail = ServiceAccount.client_email;
     const payload = JSON.stringify({uid, sheetId: spreadsheetId});
 

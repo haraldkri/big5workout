@@ -67,8 +67,8 @@ export const createUserRecordsSheet = onCall(async (request) => {
     }
 });
 
-// if the name of handleSheetDeletion is changed please also change the name of scheduleSheetDeletion in ./utils/googleSheetsApi.ts
-export const handleSheetDeletion = onRequest(async (req, res) => {
+// if the name of deleteUserRecordsSheet is changed please also change the name of scheduleSheetDeletion in ./utils/googleSheetsApi.ts -> url
+export const deleteUserRecordsSheet = onRequest(async (req, res) => {
     const {uid, sheetId} = req.body;
 
     const auth = new google.auth.GoogleAuth({
