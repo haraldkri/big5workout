@@ -44,6 +44,8 @@ service cloud.firestore {
         match /exercises/{exerciseId} {
           allow read: if isUser();
           allow create: if isUser();
+          allow update: if isUser();
+          allow delete: if isUser();
 
             // Allow users to update their own data
             match /records/{recordId} {

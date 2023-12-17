@@ -1,7 +1,7 @@
 import {Button, message} from "antd";
 import {useTranslation} from "react-i18next";
 import {getFunctions, httpsCallable} from "firebase/functions";
-import {FC} from "react";
+import {FC, useState} from "react";
 import {useOutletContext} from "react-router-dom";
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 }
 
 const RecordsExportButton: FC<Props> = ({disabled, loading}) => {
+    const [loadingState, setLoadingState] = useState(false);
     const {t} = useTranslation();
     const uid: string = useOutletContext();
     const functions = getFunctions();
@@ -19,15 +20,21 @@ const RecordsExportButton: FC<Props> = ({disabled, loading}) => {
 
     const handleOnClick = async () => {
         // Perform export or further processing here
-        createRecordsSheet(uid).then((result: any) => {
-            if (!result) {
-                message.error("Error creating google sheet");
-            }
-        })
+        setLoadingState(true);
+        createRecordsSheet(uid)
+            .then((result: any) => {
+                if (!result) {
+                    message.error(t("Error creating google sheet"));
+                }
+            })
+            .finally(() => {
+                setLoadingState(false);
+            });
     }
 
     return (
-        <Button type={"primary"} size={"large"} disabled={disabled} loading={loading} ghost={true} title={t("Export to Google Sheets")}
+        <Button type={"primary"} size={"large"} disabled={disabled} loading={loadingState || loading} ghost={true}
+                title={t("Export to Google Sheets")}
                 data-cy="data-export-button" onClick={handleOnClick}>
             {t("Export to Google Sheets")}
         </Button>

@@ -38,9 +38,8 @@ const Profile = () => {
     return (
         <AppPageWrapper data-cy={'profile-page'}>
             <CenterInline>
-                {/*todo: After updating the sheet deletion logic in the functions add the following back again: disabled={!!userSheetUrl}*/}
                 <FlexSpace direction={"vertical"} align={"center"}>
-                    <RecordsExportButton loading={status === "loading"}/>
+                    <RecordsExportButton disabled={!!userSheetUrl} loading={status === "loading"}/>
                     {
                         userSheetUrl && <Alert
                             message={t("Successfully created Google Sheet")}
