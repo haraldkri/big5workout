@@ -14,6 +14,7 @@ import {google} from "googleapis";
 import {addSheetToUser, createNewGoogleSheet, deleteSheetById, ServiceAccount} from "./utils/googleSheetsApi";
 import {onCall, onRequest} from "firebase-functions/v2/https";
 import {logger, setGlobalOptions} from "firebase-functions/v2";
+import {sendEmail} from "./utils/sendEmails";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -86,3 +87,17 @@ export const deleteUserRecordsSheet = onRequest(async (req, res) => {
         res.status(500).send('Error deleting google sheet.');
     }
 });
+
+export const createContactEmail = onCall(async (request) => {
+    const {email, name, subject, message} = request.data;
+    try {
+        await sendEmail(email, name, subject, message);
+        return {code: 200};
+    } catch (e) {
+        console.error("Error sending email", e);
+        return {
+            code: 500,
+            error: e
+        };
+    }
+})

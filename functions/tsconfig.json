@@ -11,7 +11,6 @@
     "esModuleInterop": true
   },
   "compileOnSave": true,
-  "include": [
-    "src"
-  ]
+  "include": ["src/**/*", "**/*.ts"],
+  "exclude": ["**/*.test.ts"]
 }
