@@ -65,7 +65,7 @@ const ContactForm: React.FC = () => {
             layout="vertical"
             requiredMark={"optional"}
         >
-            <ContentCard data-cy={"input-info"} title={t("Enter your email and message")}>
+            <ContentCard data-cy={"input-info"}>
                 {
                     user?.data?.email
                         ? null
