@@ -8,12 +8,21 @@ import {Content} from "../../components/StyledComponents";
 import {TabLink} from "../../components/StyledComponents/routerComponents";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
+import AppHeader from "../../components/AppHeader";
+import {useUser} from "reactfire";
+import styled from "styled-components";
 
 type LegalPages = 'imprint' | 'privacy-policy' | 'contact';
+
+const LayoutContent = styled(Content)`
+  padding: 0;
+`;
 
 const LegalLayout = () => {
     const {t} = useTranslation();
     let location = useLocation();
+    const loggedIn = !!useUser().data;
+
     const getActiveTab = () => {
         const path = location.pathname.split('/')[2] as LegalPages;
         return path ? path : 'imprint'
@@ -55,7 +64,8 @@ const LegalLayout = () => {
     }, [location]);
 
     return (
-        <Content data-cy={'legal-pages'}>
+        <LayoutContent data-cy={'legal-pages'}>
+            <AppHeader enableBackNavigation={true} navigateBackTarget={loggedIn ? "/app" : "/"}/>
             <Tabs
                 activeKey={activeTab}
                 centered
@@ -63,7 +73,7 @@ const LegalLayout = () => {
                 items={items}
                 style={{height: "100%"}}
             />
-        </Content>
+        </LayoutContent>
     );
 };
 

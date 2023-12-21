@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {Content} from "../components/StyledComponents";
 import {useContext, useState} from "react";
 import {UserContext} from "../context/UserContext.ts";
+import {useUser} from "reactfire";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -37,6 +38,7 @@ const InlineGrid = styled.div`
 const Home = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const loggedIn = !!useUser().data;
     const {login} = useContext(UserContext)
     const [modalVisible, setModalVisible] = useState(!localStorage.getItem("inDevModalShown"));
 
@@ -65,12 +67,22 @@ const Home = () => {
                 <IntroText>
                     <h1 data-cy="landing-page-title">{t("Good Afternoon, Everyone.")}</h1>
                     <ButtonWrapper>
-                        <Button
-                            data-cy={"login-button"}
-                            onClick={login}
-                            type="primary">
-                            {t("Login and Start Workout")}
-                        </Button>
+                        {
+                            loggedIn
+                                ? <Button
+                                    data-cy={"back-to-app"}
+                                    onClick={() => navigate("/app")}
+                                    type="primary">
+                                    {t("Start Workout")}
+                                </Button>
+                                : <Button
+                                    data-cy={"login-button"}
+                                    onClick={login}
+                                    type="primary">
+                                    {t("Login and Start Workout")}
+                                </Button>
+                        }
+
                     </ButtonWrapper>
                 </IntroText>
             </ContentCard>
