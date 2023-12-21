@@ -15,6 +15,7 @@ import {addSheetToUser, createNewGoogleSheet, deleteSheetById, ServiceAccount} f
 import {onCall, onRequest} from "firebase-functions/v2/https";
 import {logger, setGlobalOptions} from "firebase-functions/v2";
 import {sendEmail} from "./utils/sendEmails";
+import {sanitizeUserInput} from "./utils/sanitizeUserInput";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -34,7 +35,7 @@ export const createDefaultUserWorkouts = regionalFunctions.auth.user().onCreate(
 });
 
 export const createUserRecordsSheet = onCall(async (request) => {
-    const uid = request.auth?.uid;
+    let uid = request.auth?.uid;
     if (!uid) {
         logger.info("User is not defined")
         return {code: 403}
@@ -91,7 +92,12 @@ export const deleteUserRecordsSheet = onRequest(async (req, res) => {
 export const createContactEmail = onCall(async (request) => {
     const {email, name, subject, message} = request.data;
     try {
-        await sendEmail(email, name, subject, message);
+        await sendEmail(
+            sanitizeUserInput(email),
+            sanitizeUserInput(name),
+            sanitizeUserInput(subject),
+            sanitizeUserInput(message)
+        );
         return {code: 200};
     } catch (e) {
         console.error("Error sending email", e);
