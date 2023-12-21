@@ -9,11 +9,16 @@ service cloud.firestore {
       && (resource.data[key] == request.resource.data[key]);
   }
 
-  function isAdmin() {
-    return get(/databases/$(database)/documents/users/$(request.auth.uid)).role == 'admin';
-  }
+function isAdmin() {
+  // Assuming 'admins' document contains user IDs in an array field 'userIds'
+  return get(/databases/$(database)/documents/roles/admins).data().userIds.includes(request.auth.uid);
+}
 
   match /databases/{database}/documents {
+    match /roles/{roleId} {
+        allow read: if isAdmin();
+    }
+
     // Exercises:
     //   - Authenticated user can read
     //   - Authenticated user can create/update (for demo purposes only)
