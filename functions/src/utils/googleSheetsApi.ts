@@ -3,6 +3,7 @@ import {firestore} from "firebase-admin";
 import {CloudTasksClient} from "@google-cloud/tasks";
 import {google as googleCloud} from "@google-cloud/tasks/build/protos/protos";
 import {google} from "googleapis";
+import moment from "moment";
 import Firestore = firestore.Firestore;
 import ITask = googleCloud.cloud.tasks.v2.ITask;
 
@@ -12,13 +13,15 @@ async function createRecordsSheet(firestore: Firestore, auth: any, uid: string) 
     const sheets = google.sheets({version: "v4", auth});
     const recordsData = await getUserRecordsData(firestore, uid);
 
-    return sheets.spreadsheets.create({
+    const spreadsheet = sheets.spreadsheets.create({
         requestBody: {
 
             properties: {
                 title: "Exercise Records",
             },
             sheets: Object.keys(recordsData).map((exerciseId) => {
+                const exerciseData = recordsData[exerciseId];
+
                 return {
                     properties: {
                         title: exerciseId,
@@ -45,12 +48,12 @@ async function createRecordsSheet(firestore: Firestore, auth: any, uid: string) 
                                         },
                                     ],
                                 },
-                                ...recordsData[exerciseId].map((record: any) => {
+                                ...exerciseData.map((record: any) => {
                                     return {
                                         values: [
                                             {
                                                 userEnteredValue: {
-                                                    numberValue: record.timestamp,
+                                                    stringValue: moment(record.timestamp).format("DD/MM/YYYY"),
                                                 },
                                             },
                                             {
@@ -73,6 +76,131 @@ async function createRecordsSheet(firestore: Firestore, auth: any, uid: string) 
             }),
         },
     });
+
+    const {spreadsheetId, spreadsheetUrl, sheets: sheetPages} = (await spreadsheet).data;
+
+    if (!spreadsheetId || !spreadsheetUrl) throw new Error("Error while creating sheet. SpreadsheetId or SpreadsheetUrl is undefined");
+    else console.info("Sheet created successfully.");
+
+    // Add the charts to the sheets
+    try {
+        const response = await sheets.spreadsheets.batchUpdate({
+            spreadsheetId,
+            requestBody: {
+                requests: sheetPages?.map((sheetPage) => {
+                    const id = sheetPage.properties?.sheetId;
+                    const exerciseId = sheetPage.properties?.title;
+                    if (!id || !exerciseId) throw new Error("Error while adding charts to sheets. SheetId or ExerciseId is undefined");
+                    const exerciseData = recordsData[exerciseId];
+
+                    return {
+                        addChart: {
+                            chart: {
+                                position: {
+                                    overlayPosition: {
+                                        anchorCell: {
+                                            sheetId: id,
+                                            rowIndex: 1,
+                                            columnIndex: 4,
+                                        },
+                                    },
+                                },
+                                spec: {
+                                    title: exerciseId,
+                                    basicChart: {
+                                        chartType: "COMBO",
+                                        legendPosition: "BOTTOM_LEGEND",
+                                        headerCount: 1,
+                                        axis: [
+                                            {
+                                                position: "BOTTOM_AXIS",
+                                                title: "Time",
+                                            },
+                                            {
+                                                position: "LEFT_AXIS",
+                                                title: "Weight",
+                                            },
+                                            {
+                                                position: "RIGHT_AXIS",
+                                                title: "Duration",
+                                            },
+                                        ],
+                                        // what are domains? https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/charts#basicchartdomain
+                                        "domains": [
+                                            {
+                                                "domain": {
+                                                    "sourceRange": {
+                                                        "sources": [{
+                                                            "sheetId": id,
+                                                            "startRowIndex": 0,
+                                                            "endRowIndex": exerciseData.length + 1,
+                                                            "startColumnIndex": 0,
+                                                            "endColumnIndex": 1,
+                                                        }]
+                                                    },
+                                                }
+                                            }
+                                        ],
+                                        series: [
+                                            {
+                                                series: {
+                                                    sourceRange: {
+                                                        sources: [
+                                                            {
+                                                                startRowIndex: 0,
+                                                                endRowIndex: exerciseData.length + 1,
+                                                                startColumnIndex: 1, // Adjusted to start from weight values
+                                                                endColumnIndex: 2,
+                                                                sheetId: id,
+                                                            },
+                                                        ],
+                                                    },
+                                                },
+                                                targetAxis: "LEFT_AXIS", // Weight values mapped to the left axis
+                                                type: "LINE",
+                                            },
+                                            {
+                                                series: {
+                                                    sourceRange: {
+                                                        sources: [
+                                                            {
+                                                                startRowIndex: 0,
+                                                                endRowIndex: exerciseData.length + 1,
+                                                                startColumnIndex: 2, // Duration values
+                                                                endColumnIndex: 3,
+                                                                sheetId: id,
+                                                            },
+                                                        ],
+                                                    },
+                                                },
+                                                colorStyle: {
+                                                    rgbColor: {
+                                                        // alpha is not supported hence the grey color, see: https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/other#colorstyle
+                                                        red: 0.85,
+                                                        green: 0.85,
+                                                        blue: 0.85,
+                                                    }
+                                                },
+                                                targetAxis: "RIGHT_AXIS",
+                                                type: "COLUMN",
+                                            }
+                                        ],
+                                    },
+                                },
+                            },
+                        },
+                    };
+                }),
+            },
+        });
+
+        console.info("Charts added to sheets", response);
+
+    } catch (e) {
+        console.error("Error adding charts to sheets", e);
+    }
+
+    return spreadsheet
 }
 
 async function scheduleSheetDeletion(firestore: Firestore, uid: string, spreadsheetId: string) {
@@ -204,7 +332,7 @@ async function getUserRecordsData(firestore: Firestore, uid: string) {
         const exerciseId = doc.id;
         const recordSnapshot = await firestore
             .collection(`users/${uid}/exercises/${exerciseId}/records`)
-            .orderBy("timestamp", "desc")
+            .orderBy("timestamp", "asc")
             .get();
 
         recordsData[exerciseId] = [];
