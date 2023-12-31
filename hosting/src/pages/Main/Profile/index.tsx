@@ -5,11 +5,11 @@ import styled from "styled-components";
 import {MailOutlined, UserOutlined} from "@ant-design/icons";
 import ContentCard from "../../../components/ContentCard";
 import {useNavigate} from "react-router-dom";
-import {useContext} from "react";
+import {useContext, useEffect, useState} from "react";
 import {UserContext} from "../../../context/UserContext.ts";
 import RecordsExportButton from "../../../components/RecordsExportButton";
-import {useFirestore, useFirestoreDocData, useUser} from "reactfire";
-import {doc} from "firebase/firestore";
+import {useFirestore, useUser} from "reactfire";
+import {doc, onSnapshot} from "firebase/firestore";
 
 const Extra = styled.div`
   flex-grow: 1;
@@ -29,10 +29,19 @@ const Profile = () => {
     const {logout, deleteUser} = useContext(UserContext);
     const firestore = useFirestore();
     const {data: user} = useUser();
-    const userRef = doc(firestore, `users/${user?.uid}`);
-    const {data, status} = useFirestoreDocData(userRef);
+    const [userSheetUrl, setUserSheetUrl] = useState<string | undefined>(undefined);
 
-    const userSheetUrl = data?.sheet?.url;
+    useEffect(() => {
+        if (!user?.uid) return
+
+        const userRef = doc(firestore, `users/${user?.uid}`);
+        const unsubscribe = onSnapshot(userRef, (doc) => {
+            const data = doc.data();
+            setUserSheetUrl(data?.sheet?.url);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     return (
         <AppPageWrapper data-cy={'profile-page'}>

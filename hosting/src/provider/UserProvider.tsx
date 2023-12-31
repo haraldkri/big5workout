@@ -5,6 +5,7 @@ import {deleteUser, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithP
 import {UserContext} from "../context/UserContext.ts";
 import {App} from "antd";
 import {useTranslation} from "react-i18next";
+import {useUser} from "reactfire";
 
 const UserProvider: React.FC<PropsWithChildren> = ({children}) => {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ const UserProvider: React.FC<PropsWithChildren> = ({children}) => {
     const auth = getAuth();
     const {t} = useTranslation();
     const {message} = App.useApp();
+    const {data: user} = useUser();
 
     // listen to changes on the firebase auth object and update user accordingly
     // If the user is not logged in but tries to access the app, redirect to landing page (login)
@@ -48,18 +50,23 @@ const UserProvider: React.FC<PropsWithChildren> = ({children}) => {
 
     const handleUserDeletion = () => {
         if (!auth.currentUser) return message.error(t("Currently no user is logged in."))
-        const email = auth.currentUser.email;
-        deleteUser(auth.currentUser).then(() => {
-            message.success(t("User with the following email deleted successfully: ") + email)
-            navigate('/', {replace: true})
-        });
+        const name = auth.currentUser.displayName;
+        deleteUser(auth.currentUser)
+            .then(() => {
+                message.success(t("Goodbye ") + name)
+                navigate('/', {replace: true})
+            })
+            .catch(error => {
+                message.error(t("Failed to delete user: ") + error.message)
+            });
     }
 
     return (
         <UserContext.Provider value={{
             login: handleLogin,
             logout: handleLogout,
-            deleteUser: handleUserDeletion
+            deleteUser: handleUserDeletion,
+            user
         }}>
             {children}
         </UserContext.Provider>

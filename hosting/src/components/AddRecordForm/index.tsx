@@ -19,7 +19,7 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
     const navigate = useNavigate();
     const {t} = useTranslation();
     const firestore = useFirestore();
-    const user = useUser();
+    const {data: user} = useUser();
 
     useEffect(() => {
         const initialValues = exerciseIds.reduce((acc, curr) => {
@@ -46,7 +46,7 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
             if (!value || !value.duration || !value.weight) continue;
 
             // Update the latest record entry in the exercises collection
-            const latestRecordEntry = doc(firestore, `users/${user?.data?.uid}/exercises/${exerciseId}`);
+            const latestRecordEntry = doc(firestore, `users/${user?.uid}/exercises/${exerciseId}`);
             promises.push(
                 setDoc(latestRecordEntry, {
                     latestRecord: {
@@ -57,7 +57,7 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
             );
 
             // Add the record to the records collection
-            const recordCollection = collection(firestore, `users/${user?.data?.uid}/exercises/${exerciseId}/records`);
+            const recordCollection = collection(firestore, `users/${user?.uid}/exercises/${exerciseId}/records`);
             promises.push(
                 addDoc(recordCollection, {
                     timestamp: new Date().getTime(),

@@ -11,11 +11,11 @@ const Wrapper = styled.div``;
 const Workout = () => {
     const {exerciseKey} = useParams();
     const firestore = useFirestore();
-    const user = useUser();
+    const {data: user} = useUser();
 
     const {data, status} = useFirestoreCollectionData(
         query(
-            collection(firestore, `users/${user?.data?.uid}/workouts`),
+            collection(firestore, `users/${user?.uid}/workouts`),
             where('key', '==', exerciseKey)
         )
     );

@@ -15,7 +15,7 @@ type Props = {
 const ExerciseInputCard = (props: Props) => {
     const {exerciseId, onChange, useMinView} = props;
     const {i18n} = useTranslation();
-    const user = useUser();
+    const {data: user} = useUser();
     const firestore = useFirestore();
 
     const [exercise, setExercise] = useState<Exercise | null>(null);
@@ -40,7 +40,7 @@ const ExerciseInputCard = (props: Props) => {
 
             // get the latest weight and duration of the exercise
             getDocs(query(
-                collection(firestore, `users/${user?.data?.uid}/exercises/${exerciseId}/records`),
+                collection(firestore, `users/${user?.uid}/exercises/${exerciseId}/records`),
                 orderBy("timestamp", 'desc'),
                 limit(1)
             )).then((querySnap) => {

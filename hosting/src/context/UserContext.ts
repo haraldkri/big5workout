@@ -4,6 +4,7 @@ interface IUserContext {
     logout: () => void,
     login: () => void,
     deleteUser: () => void,
+    user: any
 }
 
 export const UserContext = createContext<IUserContext>({
@@ -12,5 +13,6 @@ export const UserContext = createContext<IUserContext>({
     logout: () => {
     },
     deleteUser: () => {
-    }
+    },
+    user: null
 });
