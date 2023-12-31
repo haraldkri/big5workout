@@ -12,11 +12,10 @@ const Workout = () => {
     const {exerciseKey} = useParams();
     const firestore = useFirestore();
     const user = useUser();
-    const uid = user?.data?.uid;
 
     const {data, status} = useFirestoreCollectionData(
         query(
-            collection(firestore, `users/${uid}/workouts`),
+            collection(firestore, `users/${user?.data?.uid}/workouts`),
             where('key', '==', exerciseKey)
         )
     );

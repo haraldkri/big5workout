@@ -1,32 +1,29 @@
-import {Button} from "antd";
+import {Button, message} from "antd";
 import {useTranslation} from "react-i18next";
 import {AppPageWrapper, CenterInline} from "../../../components/StyledComponents";
 import {useNavigate} from "react-router-dom";
-import {collection, getDocs, limit, orderBy, query} from "firebase/firestore";
-import {useFirestore, useUser} from "reactfire";
+import {collection, limit, orderBy, query} from "firebase/firestore";
+import {useFirestore, useFirestoreCollectionData, useUser} from "reactfire";
 import {getName} from "../../../utils/languageKeySelect.ts";
-import {useEffect, useState} from "react";
-import {Workout} from "../../../types.ts";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import _ from "lodash";
 
 const WorkoutSelectList = () => {
     const navigate = useNavigate();
-    const {i18n} = useTranslation();
+    const {i18n, t} = useTranslation();
     const firestore = useFirestore();
-    const user = useUser();
-    const uid = user?.data?.uid;
-    const [workoutList, setWorkoutList] = useState<Workout[]>([]);
+    const {data: user} = useUser();
 
-    useEffect(() => {
-        if (!uid) return;
-        getDocs(query(
-            collection(firestore, `users/${uid}/workouts`),
+    const {data: workoutList, status, isComplete} = useFirestoreCollectionData(
+        query(
+            collection(firestore, `users/${user?.uid}/workouts`),
             orderBy("lastUsed", 'desc'),
             limit(20)
-        )).then((docSnap) => {
-            if (docSnap.empty) return console.log('no workouts found');
-            setWorkoutList(docSnap.docs.map((doc: any) => doc.data()));
-        });
-    }, [uid, firestore]);
+        )
+    );
+
+    if (status === 'loading') return <LoadingSpinner/>;
+    if (isComplete && _.isEmpty(workoutList)) message.error(t("No workouts found"));
 
     const onWorkoutSelect = (workoutKey: string) => {
         navigate(`/app/workout/${workoutKey}`);
