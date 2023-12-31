@@ -26,11 +26,10 @@ const FlexSpace = styled(Space)`
 const Profile = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {logout} = useContext(UserContext);
+    const {logout, deleteUser} = useContext(UserContext);
     const firestore = useFirestore();
-    const user = useUser();
-    const uid = user?.data?.uid;
-    const userRef = doc(firestore, `users/${uid}`);
+    const {data: user} = useUser();
+    const userRef = doc(firestore, `users/${user?.uid}`);
     const {data, status} = useFirestoreDocData(userRef);
 
     const userSheetUrl = data?.sheet?.url;
@@ -79,7 +78,7 @@ const Profile = () => {
                 </ContentCard>
                 <CenterInline>
                     <Button type={"text"} danger={true} size={"large"} title={t("Delete Profile")}
-                            icon={<UserOutlined/>} data-cy="delete-profile-button">
+                            icon={<UserOutlined/>} data-cy="delete-profile-button" onClick={deleteUser}>
                         {t("Delete Profile")}
                     </Button>
                 </CenterInline>

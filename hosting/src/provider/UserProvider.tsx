@@ -1,14 +1,16 @@
 import React, {useEffect} from "react";
 import {PropsWithChildren} from "../types.ts";
 import {useLocation, useNavigate} from "react-router-dom";
-import {getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth";
+import {deleteUser, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth";
 import {UserContext} from "../context/UserContext.ts";
 import {App} from "antd";
+import {useTranslation} from "react-i18next";
 
 const UserProvider: React.FC<PropsWithChildren> = ({children}) => {
     const navigate = useNavigate();
     let location = useLocation();
     const auth = getAuth();
+    const {t} = useTranslation();
     const {message} = App.useApp();
 
     // listen to changes on the firebase auth object and update user accordingly
@@ -29,17 +31,26 @@ const UserProvider: React.FC<PropsWithChildren> = ({children}) => {
         signInWithPopup(auth, provider)
             .then(_response => {
                 navigate('/app', {replace: true})
-                message.success("Login successful")
+                message.success(t("Login successful"))
             })
             .catch(_error => {
-                message.error("Login failed")
+                message.error(t("Login failed"))
                 navigate('/', {replace: true})
             })
     }
 
     const handleLogout = () => {
         signOut(auth).then(() => {
-            message.success("Logout successful")
+            message.success(t("Logout successful"))
+            navigate('/', {replace: true})
+        });
+    }
+
+    const handleUserDeletion = () => {
+        if (!auth.currentUser) return message.error(t("Currently no user is logged in."))
+        const email = auth.currentUser.email;
+        deleteUser(auth.currentUser).then(() => {
+            message.success(t("User with the following email deleted successfully: ") + email)
             navigate('/', {replace: true})
         });
     }
@@ -48,6 +59,7 @@ const UserProvider: React.FC<PropsWithChildren> = ({children}) => {
         <UserContext.Provider value={{
             login: handleLogin,
             logout: handleLogout,
+            deleteUser: handleUserDeletion
         }}>
             {children}
         </UserContext.Provider>
