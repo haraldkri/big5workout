@@ -68,7 +68,6 @@ const LegalLayout = () => {
             <AppHeader enableBackNavigation={true} navigateBackTarget={loggedIn ? "/app" : "/"}/>
             <Tabs
                 activeKey={activeTab}
-                centered
                 type={"line"}
                 items={items}
                 style={{height: "100%"}}
