@@ -51,13 +51,13 @@ const Home = () => {
         <Wrapper data-cy='landing-page'>
             <Modal open={modalVisible} onOk={closeModal} onCancel={closeModal}>
                 <Result
-                    title="This project is still in development."
+                    title={t("This project is still in development.")}
                     extra={
                         [
-                            "You are welcome to try it out, but please be aware that some key functionalities may not be implemented yet.",
+                            t("You are welcome to try it out, but please be aware that some key functionalities may not be implemented yet."),
                             <br/>,
                             <br/>,
-                            "This website is currently developed for mobile only."
+                            t("This website is currently developed for mobile only.")
                         ]
                     }
                 />

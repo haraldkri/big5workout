@@ -31,9 +31,7 @@ function App() {
     const {i18n} = useTranslation();
 
     useEffect(() => {
-        const language = localStorage.getItem('i18nLanguage') || 'en';
-        moment.locale(language);
-        i18n.changeLanguage(language)
+        moment.locale(i18n.language);
     }, [i18n]);
 
     return (

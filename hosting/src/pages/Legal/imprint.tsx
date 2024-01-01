@@ -41,12 +41,10 @@ const Imprint = () => {
                     </FlexGrowColumn>
                 </FlexRow>
                 <FlexRow>
-                    <FlexGrowColumn>{t("Idea/Inspiration")}</FlexGrowColumn>
+                    <FlexGrowColumn>{t("Inspiration")}</FlexGrowColumn>
                     <FlexGrowColumn>
-                        <IconLabel gapSize={"medium"} icon={<TeamOutlined/>}
-                                   label={"Harald Kriebisch"}/>
                         <IconLabel gapSize={"medium"} icon={<BookOutlined/>}
-                                   label={"Body by Science by Doug McGuff, John Little"}/>
+                                   label={t("Body by Science by Doug McGuff, John Little")}/>
                     </FlexGrowColumn>
                 </FlexRow>
             </ContentCard>
