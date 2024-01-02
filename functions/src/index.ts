@@ -13,9 +13,10 @@ import addDefaultWorkout, {addDefaultUserInformation} from "./utils/addDefaultDa
 import {google} from "googleapis";
 import {addSheetToUser, createNewGoogleSheet, deleteSheetById, ServiceAccount} from "./utils/googleSheetsApi";
 import {onCall, onRequest} from "firebase-functions/v2/https";
-import {logger, setGlobalOptions} from "firebase-functions/v2";
+import {logger, pubsub, setGlobalOptions} from "firebase-functions/v2";
 import {sendEmail} from "./utils/sendEmails";
 import {sanitizeUserInput} from "./utils/sanitizeUserInput";
+import disableBilling from "./utils/disableBilling";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -26,6 +27,19 @@ admin.initializeApp();
 setGlobalOptions({region: 'europe-west3'});
 // create function to declare region for all firebase v1 functions
 const regionalFunctions = region("europe-west3");
+
+
+// Thanks go to minima for explaining how to set up a budget kill switch: https://blog.minimacode.com/cap-firebase-spending/
+export const billingMonitor = pubsub.onMessagePublished('billing-kill-budget', async (pubsubMessage) => {
+    const rawMessageData = pubsubMessage.data.message.data;
+    const pubsubData = JSON.parse(Buffer.from(rawMessageData, 'base64').toString())
+    const {costAmount, budgetAmount, currencyCode} = pubsubData
+
+    logger.info(`Project current cost is: ${costAmount}${currencyCode} out of ${budgetAmount}${currencyCode}`)
+    if (budgetAmount < costAmount) await disableBilling()
+
+    return null // returns nothing
+})
 
 export const createDefaultUserWorkouts = regionalFunctions.auth.user().onCreate((user) => {
     const uid = user.uid;
