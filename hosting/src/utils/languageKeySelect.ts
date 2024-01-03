@@ -3,6 +3,6 @@
 // i18n.language
 export function getName(data: Required<{ englishName: string, germanName: string }> | null, language: string) {
     if (!data) return undefined;
-    if (language === "de") return data?.germanName;
+    if (language === "de-DE") return data?.germanName;
     return data?.englishName;
 }
