@@ -1,70 +1,41 @@
 rules_version = '2';
 service cloud.firestore {
 
-  // Determine if the value of the field "key" is the same
-  // before and after the request.
-  function unchanged(key) {
-    return (key in resource.data) 
-      && (key in request.resource.data) 
-      && (resource.data[key] == request.resource.data[key]);
-  }
-
-function isAdmin() {
-  // Assuming 'admins' document contains user IDs in an array field 'userIds'
-  return get(/databases/$(database)/documents/roles/admins).data().userIds.includes(request.auth.uid);
-}
-
   match /databases/{database}/documents {
+
     match /roles/{roleId} {
-        allow read: if isAdmin();
+        allow read: if resource.data.isAdmin == true;
     }
 
-    // Exercises:
-    //   - Authenticated user can read
-    //   - Authenticated user can create/update (for demo purposes only)
-    //   - Updates are allowed if no fields are added and name is unchanged
-    //   - Deletes are not allowed (default)
+    function isAdmin(){
+     	let adminDoc = get(/databases/$(database)/documents/roles/admins).data;
+  		// Check if the userIds array contains the request.auth.uid
+  		return request.auth.uid in adminDoc.userIds;
+    }
+
     match /exercises/{exerciseId} {
-      allow read;
-      allow create: if isAdmin(); // if userId is adminId
-      allow update: if isAdmin(); // if userId is adminId
-      allow delete: if isAdmin(); // if userId is adminId
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null && isAdmin();
     }
 
-    // Users:
-    //   - Authenticated user can read, create, update, delete
-    //   - Updates are allowed if the name is unchanged
     match /users/{userId} {
-    
       function isUser() {
-        return request.auth != null && request.auth.uid == userId;
+        return request.auth != null && userId == request.auth.uid;
       }
-      
-      allow read: if isUser();
-      allow create: if isUser();
-      allow update: if isUser();
-      allow delete: if isUser();
 
-        // Allow users to add new exercises to their own data
-        match /exercises/{exerciseId} {
-          allow read: if isUser();
-          allow create: if isUser();
-          allow update: if isUser();
-          allow delete: if isUser();
+      allow read, create, update, delete: if isUser();
 
-            // Allow users to update their own data
-            match /records/{recordId} {
-              allow read: if isUser();
-              allow create: if isUser();
-              allow update: if isUser();
-            }
+      match /exercises/{exerciseId} {
+        allow read, create, update, delete: if isUser();
+
+        match /records/{recordId} {
+        	allow read, create, update: if isUser();
         }
+      }
 
-        match /workouts/{workoutId} {
-          allow read: if isUser();
-          allow create: if isUser();
-          allow update: if isUser();
-        }
+      match /workouts/{workoutId} {
+        allow read, create, update: if isUser();
+      }
     }
   }
 }
