@@ -12,6 +12,7 @@ import {useTranslation} from "react-i18next";
 import UserProvider from "./provider/UserProvider.tsx";
 import ErrorView from "./components/ErrorView";
 import WorkoutResult from "./pages/Main/Workout/result.tsx";
+import AddExercise from "./pages/Main/Workout/addExercise.tsx";
 
 const AppRouter = () => {
     const {t} = useTranslation();
@@ -74,6 +75,14 @@ const AppRouter = () => {
                                         element: <WorkoutResult/>,
                                         handle: {
                                             title: t('Workout Result')
+                                        }
+                                    },
+                                    {
+                                        path: "add-exercise",
+                                        errorElement: <ErrorView/>,
+                                        element: <AddExercise/>,
+                                        handle: {
+                                            title: t('Add Exercise')
                                         }
                                     }
                                 ]
