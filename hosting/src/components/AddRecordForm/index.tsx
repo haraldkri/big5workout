@@ -15,7 +15,7 @@ type Props = {
 
 const AddRecordForm: FC<Props> = ({exerciseIds}) => {
     const [loading, setLoading] = React.useState(false);
-    const [values, setValues] = React.useState<Values>({}); // State for the rating
+    const [values, setValues] = React.useState<Values>({});
     const navigate = useNavigate();
     const {t} = useTranslation();
     const firestore = useFirestore();
@@ -81,9 +81,6 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
         <div>
             <Form
                 name="addWorkoutRecordForm"
-                labelCol={{span: 8}}
-                wrapperCol={{span: 16}}
-                style={{maxWidth: 600, maxHeight: "100%"}}
                 onFinish={onFinish}
                 autoComplete="off"
                 disabled={loading}
