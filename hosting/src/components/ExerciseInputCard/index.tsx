@@ -60,6 +60,8 @@ const ExerciseInputCard = (props: Props) => {
     return <Card
         onChange={onChange}
         title={title}
+        exerciseLink={exercise?.exerciseLink}
+        previewImage={exercise?.previewImage}
         images={exercise?.images}
         latestDuration={latestDuration}
         latestWeight={latestWeight}

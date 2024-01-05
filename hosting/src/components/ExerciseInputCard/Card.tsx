@@ -1,18 +1,21 @@
 import ContentCard from "../ContentCard";
 import styled from "styled-components";
-import {Carousel, Divider, Input, Skeleton, Typography} from "antd";
+import {Carousel, Divider, Input, Typography} from "antd";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import {formatSeconds, reverseFormatSeconds} from "../../utils/formatTime.ts";
 import {formatWeight, reverseFormatWeight} from "../../utils/formatWeight.ts";
 import {useEffect, useState} from "react";
 import ExercisePickerModal from "../ExercisePickerModal";
-import {Center, Grow} from "../StyledComponents";
+import {Grow} from "../StyledComponents";
 import {useTranslation} from "react-i18next";
 import {ExerciseValue} from "../../types.ts";
+import {InfoCircleOutlined} from "@ant-design/icons";
 
 const ExerciseTitle = styled.h5`
   color: ${({theme}) => theme.colorPrimary};
   margin: 0;
+  display: flex;
+  gap: 8px;
 `;
 
 const Item = styled.div`
@@ -61,18 +64,15 @@ export type Props = {
     title?: string,
     latestWeight?: number,
     latestDuration?: number,
+    exerciseLink?: string,
+    previewImage?: {
+        srcUrl: string;
+        storageUrl: string;
+    }
     images?: {
-        /// Placeholder image to show while the actual image is loading, or if the image fails to load
-        /// Should be a low resolution image of the actual image
-        /// This is optional, if not provided, a default placeholder will be used
-        placeholderUrl?: string,
-        /// The url of the actual image file
-        url?: string,
-        /// The url where the original image can be found
-        link?: string,
-        /// The alt text of the image
-        alt?: string
-    }[],
+        srcUrl: string;
+        storageUrl: string;
+    }[]
 }
 
 type ModalConfig = {
@@ -84,7 +84,7 @@ const defaultWeight = 0;
 const defaultDuration = 90;
 
 const Card = (props: Props) => {
-    const {useMinView, onChange, images, title, latestDuration, latestWeight} = props;
+    const {useMinView, onChange, images, title, latestDuration, latestWeight, exerciseLink, previewImage} = props;
     const {t} = useTranslation();
 
     const [weight, setWeight] = useState<string | undefined>(undefined);
@@ -101,7 +101,7 @@ const Card = (props: Props) => {
         }
     }, [weight, duration]);
 
-    const handleImageClick = (link: string) => {
+    const openImage = (link: string) => {
         window.open(link, '_blank');
     }
 
@@ -133,18 +133,21 @@ const Card = (props: Props) => {
     }
 
     return <ContentCard>
-        <ExerciseTitle>{title}</ExerciseTitle>
+        <ExerciseTitle>
+            <span>{title}</span>
+            <InfoCircleOutlined onClick={() => exerciseLink && openImage(exerciseLink)}/>
+        </ExerciseTitle>
         {
             !useMinView && <Carousel>
                 {images && images.map((image, index) => {
-                    const {placeholderUrl, url, link} = image;
                     return <Item key={index}>
+
                         <LazyLoadImage
-                            placeholder={<Center><Skeleton.Image active={true}/></Center>}
-                            placeholderSrc={placeholderUrl}
-                            src={url}
+                            // placeholder={<Center><Skeleton.Image active={true}/></Center>}
+                            placeholderSrc={previewImage?.storageUrl}
+                            src={image.storageUrl}
                             alt={title}
-                            onClick={() => link && handleImageClick(link)}
+                            onClick={() => exerciseLink && openImage(exerciseLink)}
                         />
                     </Item>
                 })}
