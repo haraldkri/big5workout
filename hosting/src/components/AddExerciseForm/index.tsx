@@ -9,21 +9,7 @@ import {UploadOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {RcFile} from "antd/es/upload";
-
-type Exercise = {
-    germanName?: string,
-    englishName?: string,
-    id?: string,
-    exerciseLink?: string,
-    previewImage?: {
-        srcUrl: string, // the url of the original image
-        storageUrl: any // the image itself (low resolution)
-    },
-    images?: {
-        srcUrl: string, // the url of the original image
-        storageUrl: string // the url of the image in the firebase storage
-    }[]
-}
+import {Exercise} from "../../static/defaultExercises.ts";
 
 const FormRow = styled(FlexRow)`
   flex-grow: 1;
@@ -69,8 +55,10 @@ const AddExerciseForm: FC = () => {
 
         try {
             const exerciseData: Exercise = {
-                germanName: values.germanName,
-                englishName: values.englishName,
+                name: {
+                    de: values.germanName,
+                    en: values.englishName
+                },
                 id: values.id,
                 exerciseLink: values.exerciseLink,
                 previewImage: {

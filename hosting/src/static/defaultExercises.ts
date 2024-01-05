@@ -77,12 +77,19 @@ export default [
 ];
 
 export type Exercise = {
-    id: string;
-    germanName: string;
-    englishName: string;
+    createdAt?: number,
+    id: string,
+    name: {
+        de: string,
+        en: string
+    },
+    exerciseLink: string,
+    previewImage: {
+        srcUrl: string,
+        storageUrl: string,
+    },
     images: {
-        url: string;
-        link: string;
-        placeholderUrl?: string;
+        srcUrl: string,
+        storageUrl: string,
     }[]
 }
