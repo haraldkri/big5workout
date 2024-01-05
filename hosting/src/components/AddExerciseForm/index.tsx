@@ -9,7 +9,7 @@ import {UploadOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {RcFile} from "antd/es/upload";
-import {Exercise} from "../../static/defaultExercises.ts";
+import {Exercise} from "../../types.ts";
 
 const FormRow = styled(FlexRow)`
   flex-grow: 1;

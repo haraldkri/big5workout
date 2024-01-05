@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
-import {Exercise} from "../../static/defaultExercises.ts";
+import {Exercise} from "../../types.ts";
 import {useFirestore, useUser} from "reactfire";
 import {collection, getDocs, limit, orderBy, query, where} from "firebase/firestore";
 import Card from "./Card";
