@@ -69,5 +69,16 @@
   "Failed to delete user: ": "Failed to delete user: ",
   "This project is still in development.": "This project is still in development.",
   "You are welcome to try it out, but please be aware that some key functionalities may not be implemented yet.": "You are welcome to try it out, but please be aware that some key functionalities may not be implemented yet.",
-  "This website is currently developed for mobile only.": "This website is currently developed for mobile only."
+  "This website is currently developed for mobile only.": "This website is currently developed for mobile only.",
+  "Add Exercise": "Add Exercise",
+  "The new exercise was added successfully!": "The new exercise was added successfully!",
+  "An error occurred while adding the exercise. Please try again later.": "An error occurred while adding the exercise. Please try again later.",
+  "German Name": "German Name",
+  "English Name": "English Name",
+  "ID": "ID",
+  "Exercise Link": "Exercise Link",
+  "This is the link that will be opened when clicking on an image.": "This is the link that will be opened when clicking on an image.",
+  "Primary Picture": "Primary Picture",
+  "Secondary Picture": "Secondary Picture",
+  "Preview Picture": "Preview Picture"
 }

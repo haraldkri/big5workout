@@ -69,5 +69,16 @@
   "Failed to delete user: ": "Benutzer konnte nicht gelöscht werden: ",
   "This project is still in development.": "Dieses Projekt befindet sich noch in der Entwicklung.",
   "You are welcome to try it out, but please be aware that some key functionalities may not be implemented yet.": "Sie können es gerne ausprobieren, aber bitte beachten Sie, dass einige wichtige Funktionen möglicherweise noch nicht implementiert sind.",
-  "This website is currently developed for mobile only.": "Diese Website wird derzeit nur für mobile Geräte entwickelt."
+  "This website is currently developed for mobile only.": "Diese Website wird derzeit nur für mobile Geräte entwickelt.",
+  "Add Exercise": "Übung hinzufügen",
+  "The new exercise was added successfully!": "Die neue Übung wurde erfolgreich hinzugefügt!",
+  "An error occurred while adding the exercise. Please try again later.": "Beim Hinzufügen der Übung ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+  "German Name": "Deutscher Name",
+  "English Name": "Englischer Name",
+  "ID": "ID",
+  "Exercise Link": "Übungslink",
+  "This is the link that will be opened when clicking on an image.": "Dies ist der Link, der geöffnet wird, wenn auf ein Bild geklickt wird.",
+  "Primary Picture": "Primäres Bild",
+  "Secondary Picture": "Sekundäres Bild",
+  "Preview Picture": "Vorschaubild"
 }

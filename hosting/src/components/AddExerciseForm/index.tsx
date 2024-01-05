@@ -189,7 +189,7 @@ const AddExerciseForm: FC = () => {
                 <Form.Item>
                     <Center>
                         <Button type="primary" htmlType="submit">
-                            {t('Finish Workout')}
+                            {t('Add Exercise')}
                         </Button>
                     </Center>
                 </Form.Item>
