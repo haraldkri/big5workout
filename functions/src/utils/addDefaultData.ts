@@ -14,8 +14,10 @@ export function addDefaultUserInformation(firestore: Firestore, user: UserRecord
 export default function addDefaultWorkout(firestore: Firestore, uid: string) {
     firestore.collection(`users/${uid}/workouts`).add({
         key: "default-training",
-        germanName: "Default Training",
-        englishName: "Default Workout",
+        name: {
+            de: "Default Training",
+            en: "Default Workout",
+        },
         exerciseIds: [
             "machine-chest-press",
             "machine-shoulder-press",
