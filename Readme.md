@@ -3,8 +3,8 @@
 - inspired after reading the book "Body by Science" by Doug McGuff and John Little
 - fun project to learn new technologies
 - main features:
-  - simple and fast workout tracking
-  - directly see the weight you used the last time for each exercise in the workout
+    - simple and fast workout tracking
+    - directly see the weight you used the last time for each exercise in the workout
 
 ## Design
 
