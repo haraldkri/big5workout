@@ -10,10 +10,11 @@ import {useTranslation} from "react-i18next";
 type Values = Record<string, ExerciseValue>;
 
 type Props = {
-    exerciseIds: string[]
+    exerciseIds: string[],
+    showExerciseImages?: boolean
 }
 
-const AddRecordForm: FC<Props> = ({exerciseIds}) => {
+const AddRecordForm: FC<Props> = ({exerciseIds, showExerciseImages}) => {
     const [loading, setLoading] = React.useState(false);
     const [values, setValues] = React.useState<Values>({});
     const navigate = useNavigate();
@@ -89,7 +90,8 @@ const AddRecordForm: FC<Props> = ({exerciseIds}) => {
                     exerciseIds.map((exerciseId, index) => {
                         return <Form.Item name={exerciseId} style={{marginBottom: "20px"}} key={index}>
                             <ExerciseInputCard exerciseId={exerciseId}
-                                               onChange={(newValue) => onValueChange(exerciseId, newValue)}/>
+                                               onChange={(newValue) => onValueChange(exerciseId, newValue)}
+                                               useMinView={!showExerciseImages}/>
                         </Form.Item>
                     })
                 }
