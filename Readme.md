@@ -1,4 +1,5 @@
 # Custom workout app
+Checkout [big5workout app](https://big5workout.web.app/)
 
 - inspired after reading the book "Body by Science" by Doug McGuff and John Little
 - fun project to learn new technologies
