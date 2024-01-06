@@ -6,10 +6,20 @@ describe("getName", () => {
     });
 
     it("returns germanName if language is de", () => {
-        expect(getName({englishName: "English", germanName: "Deutsch"}, "de")).toBe("Deutsch");
+        expect(getName({
+            name: {
+                en: "English",
+                de: "Deutsch"
+            }
+        }, "de-DE")).toBe("Deutsch");
     });
 
     it("returns englishName if language is not de", () => {
-        expect(getName({englishName: "English", germanName: "Deutsch"}, "en")).toBe("English");
+        expect(getName({
+            name: {
+                en: "English",
+                de: "Deutsch"
+            }
+        }, "en-US")).toBe("English");
     });
 })

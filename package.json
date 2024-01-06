@@ -1,4 +1,10 @@
 {
+  "private": "true",
+  "author": {
+    "name": "Harald Kriebisch",
+    "email": "kriebisch.harald+contact@gmail.com",
+    "url": "https://harald-kriebisch-personal.web.app/"
+  },
   "dependencies": {
     "firebase": "^9.22.1",
     "react-router-dom": "^6.15.0",
