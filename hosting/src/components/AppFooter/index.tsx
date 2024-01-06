@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import {TabLink} from "../StyledComponents/routerComponents";
-import {Tabs} from "antd";
+import {Tabs, theme} from "antd";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {FireOutlined, RadarChartOutlined, UserOutlined} from "@ant-design/icons";
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $background: string }>`
   width: 100%;
   display: flex;
   align-items: center;
-  background: ${({theme}) => theme.purple10};
+  background: ${({$background}) => $background};
 
   & .ant-tabs-nav::before {
     top: 0;
@@ -28,6 +28,8 @@ type AppPages = 'workout' | 'profile';
 const AppFooter = () => {
     const {t} = useTranslation();
     let location = useLocation();
+    const {token} = theme.useToken();
+
     const getActiveTab = () => {
         const path = location.pathname.split('/')[2] as AppPages;
         return path ? path : 'workout'
@@ -67,7 +69,7 @@ const AppFooter = () => {
     }, [location]);
 
     return (
-        <Wrapper data-cy={"app-page"}>
+        <Wrapper data-cy={"app-page"} $background={token.purple10}>
             <Tabs
                 data-cy="bottom-navigation"
                 activeKey={activeTab}

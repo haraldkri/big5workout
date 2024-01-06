@@ -4,13 +4,14 @@ import {SmallLogo} from "../svg";
 import usePageTitle from "../../hooks/usePageTitle";
 import {useNavigate} from "react-router-dom";
 import {LeftOutlined} from "@ant-design/icons";
+import {theme} from "antd";
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $background: string }>`
   width: 100%;
   display: flex;
   align-items: center;
   padding: 20px 20px;
-  background: ${({theme}) => theme.purple10};
+  background: ${({$background}) => $background};
 `;
 
 const Title = styled.h2`
@@ -47,9 +48,10 @@ type Props = {
 const AppHeader = ({enableBackNavigation, navigateBackTarget}: Props) => {
     const title = usePageTitle();
     const navigate = useNavigate();
+    const {token} = theme.useToken();
 
     return (
-        <Wrapper data-cy="page-header">
+        <Wrapper data-cy="page-header" $background={token.purple10}>
             <TitleWrapper>
                 {
                     enableBackNavigation && <LeftOutlined onClick={

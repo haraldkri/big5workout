@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import {PropsWithChildren} from "../../types.ts";
+import {theme} from "antd";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -12,9 +13,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const Content = styled.div<{ $gapSize?: number }>`
+const Content = styled.div<{ $gapSize?: number, $background: string }>`
   padding: 20px;
-  background: ${({theme}) => theme.purple10};
+  background: ${({$background}) => $background};
   display: flex;
   flex-direction: column;
   gap: ${({$gapSize}) => $gapSize ?? 10}px;
@@ -26,6 +27,7 @@ type ContentCardProps = PropsWithChildren<{
     'data-cy'?: string;
 }>;
 const ContentCard: React.FC<ContentCardProps> = (props) => {
+    const {token} = theme.useToken();
     const {title, contentGap, children, 'data-cy': dataCy} = props;
 
     return (
@@ -34,7 +36,7 @@ const ContentCard: React.FC<ContentCardProps> = (props) => {
                 title && <h5>{title}</h5>
             }
 
-            <Content $gapSize={contentGap}>
+            <Content $gapSize={contentGap} $background={token.purple10}>
                 {children}
             </Content>
         </Wrapper>

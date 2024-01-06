@@ -72,5 +72,5 @@ export const AppPageWrapper = styled.div`
 `;
 
 export const FullWidthButton = styled(Button)`
-    width: 100%;
+  width: 100%;
 `;
