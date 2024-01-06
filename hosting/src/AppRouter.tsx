@@ -2,7 +2,7 @@ import {createBrowserRouter, Navigate, Outlet, RouterProvider} from "react-route
 import Home from "./pages/home.tsx";
 import MainLayout from "./pages/Main/Layout.tsx";
 import WorkoutSelectList from "./pages/Main/Workout";
-import Workout from "./pages/Main/Workout/workout.tsx";
+import Workout from "./pages/Main/Workout/active/workout.tsx";
 import Profile from "./pages/Main/Profile";
 import LegalLayout from "./pages/Legal/Layout.tsx";
 import Imprint from "./pages/Legal/imprint.tsx";
@@ -13,6 +13,7 @@ import UserProvider from "./provider/UserProvider.tsx";
 import ErrorView from "./components/ErrorView";
 import WorkoutResult from "./pages/Main/Workout/result.tsx";
 import AddExercise from "./pages/Main/Workout/addExercise.tsx";
+import AddWorkout from "./pages/Main/Workout/addWorkout.tsx";
 
 const AppRouter = () => {
     const {t} = useTranslation();
@@ -62,12 +63,19 @@ const AppRouter = () => {
                                         }
                                     },
                                     {
-                                        path: ":exerciseKey",
+                                        path: "active",
                                         errorElement: <ErrorView/>,
-                                        element: <Workout/>,
-                                        handle: {
-                                            title: t('Workout')
-                                        }
+                                        element: <Outlet/>,
+                                        children: [
+                                            {
+                                                path: ":exerciseKey",
+                                                errorElement: <ErrorView/>,
+                                                element: <Workout/>,
+                                                handle: {
+                                                    title: t('Workout')
+                                                }
+                                            }
+                                        ]
                                     },
                                     {
                                         path: "result",
@@ -83,6 +91,14 @@ const AppRouter = () => {
                                         element: <AddExercise/>,
                                         handle: {
                                             title: t('Add Exercise')
+                                        }
+                                    },
+                                    {
+                                        path: "add-workout",
+                                        errorElement: <ErrorView/>,
+                                        element: <AddWorkout/>,
+                                        handle: {
+                                            title: t('Add Workout')
                                         }
                                     }
                                 ]

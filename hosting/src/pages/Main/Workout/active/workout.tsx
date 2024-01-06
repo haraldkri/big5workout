@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import {useParams} from "react-router-dom";
-import AddRecordForm from "../../../components/AddRecordForm";
+import AddRecordForm from "../../../../components/AddRecordForm";
 import {useFirestore, useFirestoreCollectionData, useUser} from "reactfire";
 import {collection, query, where} from "firebase/firestore";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import ErrorView from "../../../components/ErrorView";
+import LoadingSpinner from "../../../../components/LoadingSpinner";
+import ErrorView from "../../../../components/ErrorView";
 
 const Wrapper = styled.div``;
 
@@ -16,7 +16,7 @@ const Workout = () => {
     const {data, status} = useFirestoreCollectionData(
         query(
             collection(firestore, `users/${user?.uid}/workouts`),
-            where('key', '==', exerciseKey)
+            where('id', '==', exerciseKey)
         )
     );
 

@@ -80,5 +80,10 @@
   "This is the link that will be opened when clicking on an image.": "Dies ist der Link, der geöffnet wird, wenn auf ein Bild geklickt wird.",
   "Primary Picture": "Primäres Bild",
   "Secondary Picture": "Sekundäres Bild",
-  "Preview Picture": "Vorschaubild"
+  "Preview Picture": "Vorschaubild",
+  "Add Workout": "Training hinzufügen",
+  "The new workout was added successfully!": "Das neue Training wurde erfolgreich hinzugefügt!",
+  "An error occurred while adding the workout. Please try again later.": "Beim Hinzufügen des Trainings ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+  "add": "hinzufügen",
+  "remove": "entfernen"
 }

@@ -80,5 +80,10 @@
   "This is the link that will be opened when clicking on an image.": "This is the link that will be opened when clicking on an image.",
   "Primary Picture": "Primary Picture",
   "Secondary Picture": "Secondary Picture",
-  "Preview Picture": "Preview Picture"
+  "Preview Picture": "Preview Picture",
+  "Add Workout": "Add Workout",
+  "The new workout was added successfully!": "The new workout was added successfully!",
+  "An error occurred while adding the workout. Please try again later.": "An error occurred while adding the workout. Please try again later.",
+  "add": "add",
+  "remove": "remove"
 }

@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {AppPageWrapper, CenterInline, FullWidthButton} from "../../../components/StyledComponents";
+import {AppPageWrapper, FullWidthButton} from "../../../components/StyledComponents";
 import {useNavigate} from "react-router-dom";
 import {collection, limit, onSnapshot, orderBy, query} from "firebase/firestore";
 import {useFirestore} from "reactfire";
@@ -7,12 +7,21 @@ import {getName} from "../../../utils/languageKeySelect.ts";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "../../../context/UserContext.ts";
+import styled from "styled-components";
+
+const CenterInline = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 16px;
+  overflow: scroll;
+`;
 
 const WorkoutSelectList = () => {
     const [workoutList, setWorkoutList] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-    const {i18n} = useTranslation();
+    const {t, i18n} = useTranslation();
     const firestore = useFirestore();
     const {user} = useContext(UserContext)
 
@@ -33,7 +42,7 @@ const WorkoutSelectList = () => {
     if (loading) return <LoadingSpinner/>;
 
     const onWorkoutSelect = (workoutKey: string) => {
-        navigate(`/app/workout/${workoutKey}`);
+        navigate(`/app/workout/active/${workoutKey}`);
     }
 
     return (
@@ -42,17 +51,22 @@ const WorkoutSelectList = () => {
                 {
                     workoutList.map((workout: any) => {
                         const name = getName(workout, i18n.language);
-                        const key = workout.key;
+                        const id = workout.id;
                         return (
-                            <FullWidthButton key={key} data-cy={`workout-${key}`} type={"primary"}
+                            <FullWidthButton key={id} data-cy={`workout-${id}`} type={"primary"}
                                              size={"large"} ghost={true} title={name}
-                                             onClick={() => onWorkoutSelect(key)}>
+                                             onClick={() => onWorkoutSelect(id)}>
                                 {name}
                             </FullWidthButton>
                         )
                     })
                 }
             </CenterInline>
+            <FullWidthButton key={"add-workout"} type={"link"}
+                             size={"large"}
+                             onClick={() => navigate(`/app/workout/add-workout`)}>
+                {t('Add Workout')}
+            </FullWidthButton>
         </AppPageWrapper>
     );
 };

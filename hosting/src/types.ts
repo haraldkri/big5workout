@@ -9,15 +9,6 @@ export type ExerciseValue = {
     duration?: number,
 }
 
-export type Workout = {
-    key: string,
-    germanName: string,
-    englishName: string,
-    exerciseIds: string[],
-    createdAt: number,
-    lastUsed: number,
-}
-
 export type WorkoutWithId = Workout & {
     id: string,
 }
@@ -38,4 +29,15 @@ export type Exercise = {
         srcUrl: string,
         storageUrl: string,
     }[]
+}
+
+export type Workout = {
+    id: string,
+    name: {
+        de: string,
+        en: string,
+    },
+    exerciseIds: string[],
+    createdAt: number,
+    lastUsed: number,
 }
