@@ -1,6 +1,5 @@
-import {Button} from "antd";
 import {useTranslation} from "react-i18next";
-import {AppPageWrapper, CenterInline} from "../../../components/StyledComponents";
+import {AppPageWrapper, CenterInline, FullWidthButton} from "../../../components/StyledComponents";
 import {useNavigate} from "react-router-dom";
 import {collection, limit, onSnapshot, orderBy, query} from "firebase/firestore";
 import {useFirestore} from "reactfire";
@@ -45,11 +44,11 @@ const WorkoutSelectList = () => {
                         const name = getName(workout, i18n.language);
                         const key = workout.key;
                         return (
-                            <Button key={key} data-cy={`workout-${key}`} type={"primary"}
-                                    size={"large"} ghost={true} title={name}
-                                    onClick={() => onWorkoutSelect(key)}>
+                            <FullWidthButton key={key} data-cy={`workout-${key}`} type={"primary"}
+                                             size={"large"} ghost={true} title={name}
+                                             onClick={() => onWorkoutSelect(key)}>
                                 {name}
-                            </Button>
+                            </FullWidthButton>
                         )
                     })
                 }

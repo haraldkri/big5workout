@@ -47,7 +47,7 @@ const Profile = () => {
         <AppPageWrapper data-cy={'profile-page'}>
             <CenterInline>
                 <FlexSpace direction={"vertical"} align={"center"}>
-                    <RecordsExportButton disabled={!!userSheetUrl} loading={status === "loading"}/>
+                    <RecordsExportButton disabled={!!userSheetUrl}/>
                     {
                         userSheetUrl && <Alert
                             message={t("Successfully created Google Sheet")}

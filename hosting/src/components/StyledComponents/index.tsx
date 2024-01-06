@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {Button} from "antd";
 
 export const Content = styled.div`
   display: flex;
@@ -68,4 +69,8 @@ export const AppPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+`;
+
+export const FullWidthButton = styled(Button)`
+    width: 100%;
 `;

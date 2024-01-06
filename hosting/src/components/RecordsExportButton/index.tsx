@@ -1,7 +1,8 @@
-import {Button, message} from "antd";
+import {message} from "antd";
 import {useTranslation} from "react-i18next";
 import {getFunctions, httpsCallable} from "firebase/functions";
 import {FC, useState} from "react";
+import {FullWidthButton} from "../StyledComponents";
 
 interface Props {
     disabled?: boolean,
@@ -31,11 +32,12 @@ const RecordsExportButton: FC<Props> = ({disabled, loading}) => {
     }
 
     return (
-        <Button type={"primary"} size={"large"} disabled={disabled} loading={loadingState || loading} ghost={true}
-                title={t("Export to Google Sheets")}
-                data-cy="data-export-button" onClick={handleOnClick}>
+        <FullWidthButton type={"primary"} size={"large"} disabled={disabled} loading={loadingState || loading}
+                         ghost={true}
+                         title={t("Export to Google Sheets")}
+                         data-cy="data-export-button" onClick={handleOnClick}>
             {t("Export to Google Sheets")}
-        </Button>
+        </FullWidthButton>
     );
 }
 
