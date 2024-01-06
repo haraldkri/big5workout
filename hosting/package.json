@@ -55,7 +55,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "@vitejs/plugin-react": "^4.0.0",
-    "antd": "^5.8.6",
+    "antd": "^5.10.3",
     "babel-plugin-named-exports-order": "^0.0.2",
     "cypress": "^13.4.0",
     "cypress-firebase": "^3.0.2",
