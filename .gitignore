@@ -19,6 +19,7 @@ dist-ssr
 
 # Sensitive data
 credentials
+.firebase
 
 # Editor directories and files
 .vscode/*
