@@ -15,7 +15,6 @@ async function createRecordsSheet(firestore: Firestore, auth: any, uid: string) 
 
     const spreadsheet = sheets.spreadsheets.create({
         requestBody: {
-
             properties: {
                 title: "Exercise Records",
             },
@@ -33,7 +32,7 @@ async function createRecordsSheet(firestore: Firestore, auth: any, uid: string) 
                                     values: [
                                         {
                                             userEnteredValue: {
-                                                stringValue: "Timestamp",
+                                                stringValue: "Date",
                                             },
                                         },
                                         {
@@ -323,7 +322,7 @@ export async function addSheetToUser(firestore: Firestore, sheetData: {
 
 type RecordData = { [exerciseId: string]: object[] }
 
-async function getUserRecordsData(firestore: Firestore, uid: string) {
+export async function getUserRecordsData(firestore: Firestore, uid: string) {
     const recordsData: RecordData = {};
 
     const exercisesSnapshot = await firestore.collection(`users/${uid}/exercises`).get();

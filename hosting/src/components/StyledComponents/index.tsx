@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Button} from "antd";
+import {Button, Space} from "antd";
 
 export const Content = styled.div`
   display: flex;
@@ -73,4 +73,8 @@ export const AppPageWrapper = styled.div`
 
 export const FullWidthButton = styled(Button)`
   width: 100%;
+`;
+
+export const FlexSpace = styled(Space)`
+  display: flex;
 `;

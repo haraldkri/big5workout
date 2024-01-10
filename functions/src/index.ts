@@ -8,15 +8,23 @@
  */
 
 import {region} from "firebase-functions";
-import admin from "firebase-admin";
+import admin, {firestore} from "firebase-admin";
 import addDefaultWorkout, {addDefaultUserInformation} from "./utils/addDefaultData";
 import {google} from "googleapis";
-import {addSheetToUser, createNewGoogleSheet, deleteSheetById, ServiceAccount} from "./utils/googleSheetsApi";
+import {
+    addSheetToUser,
+    createNewGoogleSheet,
+    deleteSheetById,
+    getUserRecordsData,
+    ServiceAccount
+} from "./utils/googleSheetsApi";
 import {onCall, onRequest} from "firebase-functions/v2/https";
 import {logger, pubsub, setGlobalOptions} from "firebase-functions/v2";
 import {sendEmail} from "./utils/sendEmails";
 import {sanitizeUserInput} from "./utils/sanitizeUserInput";
 import disableBilling from "./utils/disableBilling";
+import Papa from "papaparse";
+import moment from "moment";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -78,6 +86,54 @@ export const createUserRecordsSheet = onCall(async (request) => {
             code: 500,
             uid,
             error: e
+        };
+    }
+});
+
+export const createUserRecordsCsvFile = onCall(async (request) => {
+    let uid = request.auth?.uid;
+    if (!uid) {
+        logger.info("User is not defined")
+        return {code: 403}
+    }
+
+    try {
+        const recordsData = await getUserRecordsData(admin.firestore(), uid).then((records) => {
+            return Object.keys(records).map((exerciseId) => {
+                const exerciseRecords = records[exerciseId];
+                return exerciseRecords.map((record: firestore.DocumentData) => {
+                    return {
+                        exerciseId: exerciseId,
+                        timestamp: record.timestamp,
+                        weight: record.weight,
+                        duration: record.duration,
+                    }
+                })
+            }).flat();
+        });
+
+        const csvFile = Papa.unparse(recordsData, {
+            header: true,
+            delimiter: ";",
+            skipEmptyLines: true,
+            columns: ["exerciseId", "timestamp", "weight", "duration"]
+        });
+
+        const currentDate = moment().format('YYYY.MM.DD_HH:mm:ss');
+        const filename = `records_${currentDate}.csv`;
+
+        return {
+            code: 200,
+            headers: {'Content-Type': 'text/csv'},
+            filename,
+            data: csvFile
+        };
+    } catch (e: any) {
+        console.error("Error creating CSV file", e);
+        return {
+            code: 500,
+            uid,
+            error: e.message
         };
     }
 });

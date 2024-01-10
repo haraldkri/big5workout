@@ -85,5 +85,8 @@
   "The new workout was added successfully!": "Das neue Training wurde erfolgreich hinzugefügt!",
   "An error occurred while adding the workout. Please try again later.": "Beim Hinzufügen des Trainings ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
   "add": "hinzufügen",
-  "remove": "entfernen"
+  "remove": "entfernen",
+  "Error creating csv file": "Fehler beim Erstellen der CSV-Datei",
+  "Export workout records": "Trainingsdaten exportieren",
+  "Export to CSV": "In CSV exportieren"
 }

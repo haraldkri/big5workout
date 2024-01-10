@@ -85,5 +85,8 @@
   "The new workout was added successfully!": "The new workout was added successfully!",
   "An error occurred while adding the workout. Please try again later.": "An error occurred while adding the workout. Please try again later.",
   "add": "add",
-  "remove": "remove"
+  "remove": "remove",
+  "Error creating csv file": "Error creating csv file",
+  "Export workout records": "Export workout records",
+  "Export to CSV": "Export to CSV"
 }
