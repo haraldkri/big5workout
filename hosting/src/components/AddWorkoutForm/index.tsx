@@ -133,10 +133,10 @@ const AddWorkoutForm: FC = () => {
             >
                 <FormRow>
                     <Form.Item label={t('German Name')} name="germanName">
-                        <Input type="text" placeholder={"Oberkörper"}/>
+                        <Input type="text" placeholder={"Großen Drei"}/>
                     </Form.Item>
                     <Form.Item label={t('English Name')} name="englishName">
-                        <Input type="text" placeholder={"Upper Body"}/>
+                        <Input type="text" placeholder={"Big Three"}/>
                     </Form.Item>
                 </FormRow>
                 <FormRow>
