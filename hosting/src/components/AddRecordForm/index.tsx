@@ -6,6 +6,7 @@ import {useFirestore, useUser} from "reactfire";
 import {addDoc, collection, doc, setDoc} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {CenterInline} from "../StyledComponents";
 
 type Values = Record<string, ExerciseValue>;
 
@@ -95,10 +96,12 @@ const AddRecordForm: FC<Props> = ({exerciseIds, showExerciseImages}) => {
                         </Form.Item>
                     })
                 }
-                <Form.Item wrapperCol={{offset: 8, span: 16}}>
-                    <Button type="primary" htmlType="submit">
-                        {t('Finish Workout')}
-                    </Button>
+                <Form.Item>
+                    <CenterInline>
+                        <Button type="primary" htmlType="submit">
+                            {t('Finish Workout')}
+                        </Button>
+                    </CenterInline>
                 </Form.Item>
             </Form>
         </div>
