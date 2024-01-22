@@ -18,6 +18,11 @@ service cloud.firestore {
       allow create, update, delete: if request.auth != null && isAdmin();
     }
 
+    match /workouts/{workoutId} {
+      allow read: if request.auth != null && (resource.data.public || resource.data.uid == request.auth.uid);
+      allow create, update, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+
     match /users/{userId} {
       function isUser() {
         return request.auth != null && userId == request.auth.uid;
