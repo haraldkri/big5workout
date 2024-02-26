@@ -42,7 +42,7 @@ const ContactForm: React.FC = () => {
             subject: form.getFieldValue("subject"),
             message: form.getFieldValue("message")
         })
-            .then((response) => {
+            .then((response: any) => {
                 if (response?.data?.code === 200) {
                     message.success(t("Message sent successfully"));
                 } else {

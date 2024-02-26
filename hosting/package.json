@@ -75,6 +75,7 @@
     "ts-jest": "^29.1.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
-    "webpack": "^5.89.0"
+    "webpack": "^5.89.0",
+    "vite-plugin-pwa": "^0.17.5"
   }
 }

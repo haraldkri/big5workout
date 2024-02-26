@@ -39,8 +39,6 @@ const WorkoutSelectList = () => {
         return () => unsubscribe();
     }, [user, firestore]);
 
-    if (loading) return <LoadingSpinner/>;
-
     const onWorkoutSelect = (workoutKey: string) => {
         navigate(`/app/workout/active/${workoutKey}`);
     }
@@ -49,17 +47,19 @@ const WorkoutSelectList = () => {
         <AppPageWrapper data-cy={'workout-select-page'}>
             <CenterInline>
                 {
-                    workoutList.map((workout: any) => {
-                        const name = getName(workout, i18n.language);
-                        const id = workout.id;
-                        return (
-                            <FullWidthButton key={id} data-cy={`workout-${id}`} type={"primary"}
-                                             size={"large"} ghost={true} title={name}
-                                             onClick={() => onWorkoutSelect(id)}>
-                                {name}
-                            </FullWidthButton>
-                        )
-                    })
+                    loading
+                        ? <LoadingSpinner/>
+                        : workoutList.map((workout: any) => {
+                            const name = getName(workout, i18n.language);
+                            const id = workout.id;
+                            return (
+                                <FullWidthButton key={id} data-cy={`workout-${id}`} type={"primary"}
+                                                 size={"large"} ghost={true} title={name}
+                                                 onClick={() => onWorkoutSelect(id)}>
+                                    {name}
+                                </FullWidthButton>
+                            )
+                        })
                 }
             </CenterInline>
             <FullWidthButton key={"add-workout"} type={"link"}
